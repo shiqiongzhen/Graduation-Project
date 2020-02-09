@@ -3,26 +3,25 @@
         <div class="title">
             全部
         </div>
-        <div v-if="detail==''">
-            <el-alert
-                title="暂无数据"
-                type="info"
-                center
-                show-icon>
-            </el-alert>
+        <spin :loading="loading"/>
+        <div class="empty" v-if="!loading&&empty">
+            <img src="@/assets/image/empty/noScore.png" alt="">
+            <p>这里什么东西都没有哦，浏览其他页面吧</p>
         </div>
-        <div>
-            <div class="item">
+        <div v-else>
+            <div class="item" v-if="!loading">
                 <el-progress type="circle" width="100" :percentage="percentage" v-if="percentage!==100"></el-progress>
                 <el-progress type="circle" width="100" :percentage="percentage" status="success" v-if="percentage==100"></el-progress>
                 <span class="description">
                     <h4>总成绩</h4>
-                    <div>{{percentage}}/100</div>
+                    <div><span class="colorText" style="font-size:16px;">{{percentage}}</span><span style="font-size:14px;"> / 100</span></div>
                 </span>
             </div>
             <el-table
+                v-if="!loading"
                 :data="tableData"
                 style="width: 100%"
+                :header-cell-style="{background:'#F8F8F8'}"
                 :row-class-name="tableRowClassName">
                 <el-table-column
                 prop="experimentName"
@@ -30,8 +29,12 @@
                 width="500">
                 </el-table-column>
                 <el-table-column
-                prop="experimentAchievement"
                 label="成绩">
+                    <template slot-scope="scope">
+                        <span class="colorText">
+                        {{ scope.row.experimentAchievement }}
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 label="操作"
@@ -51,26 +54,33 @@
 </template>
 
 <script>
+import spin from '@/components/spin.vue'
 export default {
     props: {
 
     },
     data() {
         return {
-            detail:"123",
-            tableData: [],
+            tableData: null,
             percentage: 0,
+            loading: true,
+            empty: false
         };
     },
     computed: {
 
     },
     created() {
-        this.$http.get(`/teaching/student/course/score/${this.$route.params.detailId}`
+        this.$http.get(`/teaching/student/course/score/${this.$route.params.courseId}`
         ).then((res) => { 
             if(res.data.code == "0"){
-                this.tableData = res.data.data.experiments
-                this.percentage = res.data.data.score
+                if(res.data.data){
+                    this.tableData = res.data.data.experiments
+                    this.percentage = res.data.data.score
+                }else{
+                    this.empty=true
+                }
+                this.loading=false
             }else if (res.data.code == "1") {
                 this.$router.push('/login'); 
             }else{
@@ -92,7 +102,7 @@ export default {
     },
     methods: {
       routeToExperiment(row){
-        this.$router.push(`/courseList/${this.$route.params.detailId}/${row.experimentId}`)
+        this.$router.push(`/courseList/${this.$route.params.courseId}/content/${row.experimentId}`)
       },
       tableRowClassName({row, rowIndex}) {
         if (rowIndex%2==0) {
@@ -104,7 +114,7 @@ export default {
       }
     },
     components: {
-
+        spin
     },
 };
 </script>
@@ -112,6 +122,18 @@ export default {
 <style scoped lang="scss">
 .page{
     padding:0 20px;
+    .colorText{
+        color: #F75C39;
+    }
+    .empty{
+        color:#7F7F7F;
+        text-align: center;
+        margin-top: 15vh;
+        p{
+            margin-top:5px;
+            font-weight: bold;
+        }
+    }
     .title{
         padding:10px;
         position: relative;
@@ -119,7 +141,8 @@ export default {
         font-weight: bold;
     }
     .item{
-        padding:1em;
+        // padding:1em;
+        padding:30px;
         .el-progress{
             vertical-align: middle;
         }
@@ -129,9 +152,6 @@ export default {
             margin-left: 1em;
             vertical-align: middle;
         }
-    }
-    .el-table .grey-row{
-        background: #F4F4F4;
     }
 }
 </style>

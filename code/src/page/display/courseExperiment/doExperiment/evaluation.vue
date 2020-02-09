@@ -4,14 +4,22 @@
             <img src="@/assets/image/user/teacher.png" alt="">
             {{teacherName}}
         </div> -->
-        <div class="content">
-            <div>实验成绩：<el-tag type="danger">{{score}}</el-tag></div>
-            <div>老师评价：{{comment}}</div>
+        <spin :loading="loading"/>
+        <div class="content" v-if="!loading">
+            <div class="empty" v-if="score!=0&&!score&&!comment">
+                <img src="@/assets/image/empty/evaluation.png" alt="">
+                <p>老师还未点评哦，请耐心等待吧</p>
+            </div>
+            <div v-else>
+                <div>实验成绩：<el-tag type="danger">{{score||(score=='0'&&'0')||"无"}}</el-tag></div>
+                <div>老师评价：{{comment||"无"}}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import spin from '@/components/spin.vue'
 export default {
     props: {
 
@@ -19,8 +27,9 @@ export default {
     data() {
         return {
             // teacherName:"测试老师",
-            score: '无',
-            comment: "无"
+            score: null,
+            comment: null,
+            loading: true
         };
     },
     computed: {
@@ -43,6 +52,7 @@ export default {
                     type: 'error'
                 });
             }
+            this.loading=false
         })
         .catch(function (error) {
             console.log(error)
@@ -58,7 +68,7 @@ export default {
 
     },
     components: {
-
+        spin
     },
 };
 </script>
@@ -71,6 +81,15 @@ export default {
     //     }
     // }
     .content{
+        .empty{
+            color:#5EABFF;
+            text-align: center;
+            margin-top: 15vh;
+            p{
+                margin-top:5px;
+                font-weight: bold;
+            }
+        }
         div{
             margin-bottom: 0.5em;
             .el-tag{

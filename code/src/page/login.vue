@@ -5,16 +5,6 @@
                 <div class="header">
                     <!-- <span><i class="el-icon-platform-eleme"></i>智慧教学平台</span> -->
                     <span class="logo"><img src="@/assets/image/logo/logo@1x.png" alt=""></span>
-                    <span class="link">
-                        <span style="margin-right: 20px;">
-                            <router-link  to = "/"><img src="@/assets/image/course.png" alt=""> <span>我的课程</span></router-link>&nbsp;&nbsp;|&nbsp;&nbsp;
-                            <router-link  to = "/user"><img src="@/assets/image/user/user30.png" alt=""> <span>刘番薯</span></router-link> 
-                            <!--  | <router-link  :to = "{ name : 'site' }">我的成绩</router-link> -->
-                        </span>
-                        <span>
-                            <router-link  to = "/user">退出</router-link>
-                        </span>
-                    </span>
                 </div>
             </el-header>
             <el-main>
@@ -32,12 +22,17 @@
                             </el-form-item>
                             <el-form-item prop="verifyCode">
                                 <div class="verifyCode">
-                                    <el-input type="password" v-model="userInfo.verifyCode" auto-complete="off" placeholder="验证码"></el-input>
-                                    <img alt="" src="@/assets/image/logo/logo80.png">
+                                    <el-input v-model="userInfo.verifyCode" auto-complete="off" placeholder="验证码"></el-input>
+                                    <img alt="" :src="verifySrc" @click="changeVerifySrc">
                                 </div>
                             </el-form-item>
+                            <el-form-item prop="ident">
+                                <el-radio v-model="userInfo.ident" label="0">学生</el-radio>
+                                <el-radio v-model="userInfo.ident" label="1">老师</el-radio>
+                                <el-radio v-model="userInfo.ident" label="2">管理员</el-radio>
+                            </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="submitForm('userInfo')">提交</el-button>
+                                <el-button type="primary" @click="submitForm('userInfo')">登录</el-button>
                                 <el-button @click="resetForm('userInfo')">重置</el-button>
                                 <el-checkbox v-model="checked" @change="remPass">记住密码</el-checkbox>
                             </el-form-item>
@@ -53,38 +48,22 @@
   export default {
     data() {
       return {
-        checked: false,
+        checked: true,
         userInfo: {
           userNumber: '',
           pass: '',
           verifyCode: '',
+          ident: '0'
         },
-        // verifyCodeSrc: '@/assets/image/logo/logo80.png' //http://120.77.242.172:8080/teaching/common/kaptcha
+        verifySrc: '/teaching/common/kaptcha' 
       };
     },
     created() {
-        // this.$http.get('/teaching/common/kaptcha'
-        // ).then((res) => { 
-        //    console.log(res)
-        // })
-        // .catch(function (error) {
-        //     console.log(error)
-        // })
-            // this.$http.get(this.$api.getCode)
-            //     .then((res) => {
-            //         this.userInfo.verifycode = res.data.verifyCode
-            //         // console.log(this.userInfo.verifycode)
-            //     })
-            //     .catch((res) => {
-            //         console.log("erro"+res)
-            //     }),
-            //     this.userInfo.account = localStorage.getItem('remAccount') || null
-            //     this.userInfo.pass = localStorage.getItem('remPass') || null
-            //     if(localStorage.getItem('remAccount') || localStorage.getItem('remPass')){
-            //         this.checked = true
-            //     }
     },
     methods: {
+        changeVerifySrc(){
+            this.verifySrc="/teaching/common/kaptcha?"+Math.random()
+        },
         remPass(){
                 if(this.checked){
                     localStorage.setItem('remAccount', this.userInfo.account)
@@ -97,26 +76,43 @@
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    // var params = new URLSearchParams();
-                    this.$http.post('/teaching/user/login',  this.Qs.stringify({
+                    // this.$http.post('/teaching/user/loginForTest', this.Qs.stringify({
+                    //     "userNumber":this.userInfo.userNumber,
+                    //     "password":this.userInfo.pass,
+                    //     "ident":this.userInfo.ident
+                    // }))
+                    this.$http.post('/teaching/user/login', this.Qs.stringify({
                         "userNumber":this.userInfo.userNumber,
                         "password":this.userInfo.pass,
-                        // "login.code":this.userInfo.verifycode
+                        "verifyCode":this.userInfo.verifyCode,
+                        "ident":this.userInfo.ident
                     }))
                     .then((res) => {
                         if(res.data.code == 0){
-                            localStorage.setItem('userAccount', this.userInfo.account)
-                            localStorage.setItem('userPass', this.userInfo.password) 
-                            this.$router.push( '/courseList' )
+                            if(this.checked){
+                                localStorage.setItem('userAccount', this.userInfo.account)
+                                localStorage.setItem('userPass', this.userInfo.password) 
+                            }
+                            localStorage.setItem('nickname', res.data.data.nickname)
+                            localStorage.setItem('headUrl', res.data.data.headUrl) 
+                            localStorage.setItem('userId', res.data.data.userId) 
+                            if(this.userInfo.ident=='0'){
+                                this.$router.push( '/display' )
+                            }else if(this.userInfo.ident=='1'){
+                                this.$router.push( '/admin' )
+                            }else{
+                                this.$router.push( '/super' )
+                            }
                         }else{
+                            this.verifySrc="/teaching/common/kaptcha?"+Math.random()
                             alert(res.data.msg)
                         }
                     })
                     .catch((err) => {
-                        console.log("erro",err)
+                        // console.log("erro",err)
                     });
                 } else {
-                    console.log('error submit!!');
+                    // console.log('error submit!!');
                     return false;
                 }
             });
@@ -160,7 +156,10 @@
     .el-main {
         padding:0;
         height: calc(100vh - 60px);
-        background: url("~@/assets/image/loginBackground.png") 100% 100% no-repeat;
+        background: url("~@/assets/image/loginBackground.png");
+        background-size:100vw calc(100vh - 100px);
+        box-shadow:0px 0px 3px 1px #C9C9C9;
+        background-repeat:no-repeat;
         .container{
             margin:0 auto;
             width: 60%;
@@ -174,6 +173,7 @@
             position: absolute;
             right: 0;
             top: 15vh;
+            box-shadow:0px 0px 3px 1px #C9C9C9;
             .title{
                 margin:3% 0 7% 0;
             }

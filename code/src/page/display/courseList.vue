@@ -6,7 +6,7 @@
                 <span class="title">进行中的课程</span>
                 <span class="search">
                     <el-input v-model="searchContent" placeholder="请输入内容" size="small"></el-input>
-                    <el-button type="primary" size="small"><i class="el-icon-search"/></el-button>
+                    <el-button type="primary" size="small" @click="handleCurrentChange()"><i class="el-icon-search"/></el-button>
                 </span>
             </div>
             <div class="imgList">
@@ -14,10 +14,12 @@
                     <el-col :span="6" v-for="(item,index) in normalList" :key="index">
                         <el-card style="margin: 5px">
                             <div @click="getCourseExperiment(item.courseId)">
-                                <img class="image" src="@/assets/image/logo/logo250.png">
+                                <img class="image" v-if="item.courseCover!=''" :src="item.courseCover">
+                                <img class="image" v-else src="@/assets/image/logo/logo250.png">
                                 <div>
                                     <p>{{item.courseName}}</p>
-                                    <p><img src="@/assets/image/user/user30.png">{{item.teacherNickname}}</p>
+                                    <p v-if="item.headUrl!=null"><img :src="item.headUrl">  {{item.teacherNickname}}</p>
+                                    <p v-else><img src="@/assets/image/user/user30.png">  {{item.teacherNickname}}</p>
                                 </div>
                             </div>
                         </el-card>
@@ -40,20 +42,22 @@
         <div class="content">
             <div class="listTitle">
                 <span class="title">已结束的课程</span>
-                <span class="search">
+                <!-- <span class="search">
                     <el-input v-model="searchContent" placeholder="请输入内容" size="small"></el-input>
                     <el-button type="primary" size="small"><i class="el-icon-search"/></el-button>
-                </span>
+                </span> -->
             </div>
             <div class="imgList">
                 <el-row>
                     <el-col :span="6" v-for="(item,index) in endList" :key="index">
                         <el-card style="margin: 5px">
                             <div @click="getCourseExperiment(item.courseId)">
-                                <img class="image" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png">
+                                <img class="image" v-if="item.courseCover!=''" :src="item.courseCover">
+                                <img class="image" v-else src="@/assets/image/logo/logo250.png"> 
                                 <div>
                                     <p>{{item.courseName}}</p>
-                                    <p>{{item.teacherNickname}}</p>
+                                    <p v-if="item.headUrl!=null"><img :src="item.headUrl">  {{item.teacherNickname}}</p>
+                                    <p v-else><img src="@/assets/image/user/user30.png">  {{item.teacherNickname}}</p>
                                 </div>
                             </div>
                         </el-card>
@@ -96,7 +100,7 @@ export default {
     },
     methods: {
         handleCurrentChange() {
-            this.$http.get('/teaching/student/course/listForNoPage'
+            this.$http.get(`/teaching/student/course/listForNoPage?keyword=${this.searchContent}`
             // ,{params:{
             //     "offset":this.paginations.page_current-1,
             //     "limit":this.paginations.page_size
@@ -105,6 +109,7 @@ export default {
                 if(res.data.code == "0"){
                     this.normalList = res.data.data.normal
                     this.endList = res.data.data.end
+                    // console.log(this.normalList)
                 }else if (res.data.code == "1") {
                     this.$router.push('/login'); 
                 }else{
@@ -130,7 +135,8 @@ export default {
 <style scoped lang="scss">
   .page {
     .banner{
-        background-image: url('~@/assets/image/banner.png');
+        background: url('~@/assets/image/oldBanner.png') no-repeat;
+        background-size:contain;;
         height: 120px;
     }
     // @media screen and (-webkit-min-device-pixel-ratio: 2),screen and (min--moz-device-pixel-ratio: 2) {
@@ -149,12 +155,13 @@ export default {
         margin:0 auto;
         margin-bottom: 20px;
         .listTitle{
-            padding: 10px 0;
+            // padding: 10px 0;
+            padding: 1em 0 8px 0;
             border-bottom: 1px solid #D8D8D8;
             margin-bottom: 10px;
             .title{
                 float:left;
-                font-size: 1.2em;
+                line-height: 2em; 
             }
             .search{
                 float:right;
@@ -179,6 +186,9 @@ export default {
                 line-height: 2em;
                 img{
                     vertical-align:middle;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
                 }
             }
             .image {

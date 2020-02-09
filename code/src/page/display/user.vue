@@ -4,11 +4,11 @@
         <div class="containner">
             <div class="leftMenu">
                 <div class="userInfo">
-                    <img src="@/assets/image/user/user100.png" alt="" class="headPic">
+                    <img  :src="headUrl" alt="" class="headPic">
                     <div class="describe">
-                        <h3>刘番薯</h3>
-                        <p>学生</p>
-                        <p>学号：201611671325</p>
+                        <h3>{{userInfo.nickname}}</h3>
+                        <p>{{userInfo.userIdent}}</p>
+                        <p>学号：{{userInfo.userNumber}}</p>
                     </div>
                 </div>
                 <ul class="menu">
@@ -22,21 +22,22 @@
                 </div>
                 <div class="content">
                     <div class="headInfo">
-                        <img src="@/assets/image/user/user80.png" alt="">
-                        <div>刘番薯</div>
+                        <img :src="headUrl" alt="">
+                        <div>{{userInfo.nickname}}</div>
                     </div>
                     <div class="title">
                         基本信息
                     </div>
                     <div class="userInfo">
-                        <div><span class="label">姓名</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">身份</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">学号/工号</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">所在院</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">所在系</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">班级</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">手机号码</span><span>{{userInfo.name}}</span></div>
-                        <div><span class="label">邮箱</span><span>{{userInfo.name}}</span></div>
+                        <div><span class="label">姓名</span><span>{{userInfo.nickname}}</span></div>
+                        <div><span class="label">身份</span><span>{{userInfo.userIdent}}</span></div>
+                        <div><span class="label">学号/工号</span><span>{{userInfo.userNumber}}</span></div>
+                        <div><span class="label">所在院</span><span>{{userInfo.college}}</span></div>
+                        <div><span class="label">所在系</span><span>{{userInfo.series}}</span></div>
+                        <div><span class="label">所在专业</span><span>{{userInfo.major}}</span></div>
+                        <div><span class="label">班级</span><span>{{userInfo.className}}</span></div>
+                        <div><span class="label">手机号码</span><span>{{userInfo.phone}}</span></div>
+                        <div><span class="label">邮箱</span><span>{{userInfo.mail}}</span></div>
                     </div>
                 </div>
             </div>
@@ -55,8 +56,19 @@ export default {
     data() {
         return {
             containner: 'personalMsg',
+            headUrl: localStorage.getItem('headUrl')||"",
             userInfo: {
-                name: "刘番薯"
+                userId: '',
+                nickname: "",
+                userNumber: "",
+                headUrl: "",
+                userIdent: "",
+                mail: "",
+                phone: "",
+                college: "",
+                series: "",
+                major: "",
+                className: ""
             }
         };
     },
@@ -64,17 +76,14 @@ export default {
 
     },
     created() {
-        this.$http.get(`/teaching/student/course/detail/${this.$route.params.detailId}`
+        this.$http.get(`/teaching/user/info/${localStorage.getItem('userId')}`
         ).then((res) => { 
             if(res.data.code == "0"){
-                this.detail = res.data.data
+                this.userInfo = res.data.data
             }else if (res.data.code == "1") {
                 this.$router.push('/login'); 
             }else{
-                this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                });
+                this.userInfo=res.data.data
             }
         })
         .catch(function (error) {
@@ -136,7 +145,8 @@ export default {
                 li{
                     padding: 0.8em;
                     &:hover{
-                        background: #E9E9E9;
+                        background: #5CB3FF;
+                        color: white;
                     }
                     span{
                         position: relative;
@@ -165,6 +175,12 @@ export default {
                 padding:10px;
                 .headInfo{
                     text-align: center;
+                    img{
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        background:#D8D8D8; 
+                    }
                 }
                 .title{
                     font-size: 0.5em;

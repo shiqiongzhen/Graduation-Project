@@ -1,37 +1,41 @@
 <template>
     <div class="page">
-        <div v-if="experimentList.length==0||!experimentList">
-            <el-alert
+        <div class="title">
+            <el-select v-model="selectValue" size="small" placeholder="时间排序">
+                <el-option label="区域一"  value="123">降序</el-option>
+                <el-option label="区域二"  value="123">升序</el-option>
+            </el-select>
+        </div>
+        <div v-if="!loading&&(!experimentList||experimentList.length==0)">
+            <!-- <el-alert
                 title="暂无数据"
                 type="info"
                 center
                 show-icon>
-            </el-alert>
+            </el-alert> -->
+            <div class="empty">
+                <img src="@/assets/image/empty/resource.png" alt="">
+                <p>这里暂无资源哦，快提醒老师上传吧</p>
+            </div>
         </div>
-       <div v-else>
-            <div class="title">
-                <el-select v-model="selectValue" size="small" placeholder="时间排序">
-                    <el-option>降序</el-option>
-                    <el-option>升序</el-option>
-                </el-select>
-            </div>
-            <div v-for="(item,index) in experimentList" :key="index">
-                <a class="item" :href="item.filePath">
-                    <img src="@/assets/image/file/doc.png" alt="" v-if="item.fileType=='doc'">
-                    <img src="@/assets/image/file/ppt.png" alt="" v-if="item.fileType=='ppt'">
-                    <img src="@/assets/image/file/pdf.png" alt="" v-if="item.fileType=='pdf'">
-                    <span class="description">
-                        <h3>{{item.fileName}}</h3>
-                        <div>{{item.fileSize||0}}</div>
-                        <div>{{item.createTime}}</div>
-                    </span>
-                </a>
-            </div>
-       </div>
+        <spin :loading="loading"/>
+        <div v-for="(item,index) in experimentList" :key="index">
+            <a class="item" :href="item.filePath">
+                <img src="@/assets/image/file/doc.png" alt="" v-if="item.fileType=='doc'">
+                <img src="@/assets/image/file/ppt.png" alt="" v-if="item.fileType=='ppt'">
+                <img src="@/assets/image/file/pdf.png" alt="" v-if="item.fileType=='pdf'">
+                <span class="description">
+                    <h3>{{item.fileName}}</h3>
+                    <div>{{item.fileSize||0}}</div>
+                    <div>{{item.createTime}}</div>
+                </span>
+            </a>
+        </div>
     </div>
 </template>
 
 <script>
+import spin from '@/components/spin.vue'
 export default {
     props: {
 
@@ -40,6 +44,7 @@ export default {
         return {
              experimentList: [],
              selectValue:"",
+             loading: true
         };
     },
     computed: {
@@ -61,6 +66,7 @@ export default {
                     type: 'error'
                 });
             }
+            this.loading=false
         })
         .catch(function (error) {
             console.log(error)
@@ -75,7 +81,7 @@ export default {
     methods: {
     },
     components: {
-
+        spin
     },
 };
 </script>
@@ -83,6 +89,7 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/style/common/mixin.scss';
 .page{
+    margin-top: -1em;
     .title{
         padding:10px;
         position: relative;
@@ -93,18 +100,29 @@ export default {
         }
         @include clearfix;
     }
+    .empty{
+        color:#5EABFF;
+        text-align: center;
+        margin-top: 15vh;
+        p{
+            margin-top:5px;
+            font-weight: bold;
+        }
+    }
     .item{
         border-bottom: 1px solid #E9E9E9;
         padding:1em;
-        display: block;
+        display: flex;
         img{
             width:40px;
             height: 40px;
+            border-radius: 4px;
         }
         .description{
-            display: inline-block;
-            line-height: 1.3em;
-            margin-left: 0.3em;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-left: 12px;
             font-size: 0.7em;
             width: 75%;
             h3{
