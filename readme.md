@@ -1,7 +1,9 @@
 #####文件说明
 ###### code
 - 说明：前端文件
-- 开发环境启动命令：npm run dev
+- 开发环境启动命令：
+  - npm i 
+  - npm run dev
 - 生产环境打包编译命令：npm run build
 - 服务器默认端口号：8080
 - 启动命令：http://localhost:8080/#/
