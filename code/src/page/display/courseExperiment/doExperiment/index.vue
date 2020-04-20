@@ -70,6 +70,7 @@ export default {
         return {
             activeName: 'content',
             experimentName: "",
+            experimentAnswerId: "",
             experimentList: [],
             recordText: '',
             editorHeight: "55vh",
@@ -124,6 +125,7 @@ export default {
                     if(res.data.data.experiment){
                         const experiment = res.data.data.experiment
                         this.experimentName = experiment.experimentName
+                        this.experimentAnswerId = experiment.experimentAnswerId
                     }
                     if(res.data.data.record){
                         const record = res.data.data.record
@@ -179,7 +181,8 @@ export default {
         switch(tab.label){
             case '实验内容':this.$router.push(`/courseList/${this.$route.params.courseId}/content/${this.$route.params.experimentId}`);break;
             case '实验资源':this.$router.push(`/courseList/${this.$route.params.courseId}/resource/${this.$route.params.experimentId}`);break;
-            case '查看答案':this.$router.push(`/courseList/${this.$route.params.courseId}/answer/${this.$route.params.experimentId}`);break;
+            // case '查看答案':this.$router.push(`/courseList/${this.$route.params.courseId}/answer/${this.$route.params.experimentId}`);break;
+            case '查看答案':this.$router.push(`/courseList/${this.$route.params.courseId}/answer/${this.$route.params.experimentId}/${this.experimentAnswerId}`);break;
             case '老师评价':this.$router.push(`/courseList/${this.$route.params.courseId}/evaluation/${this.$route.params.experimentId}`);break;
             default:return;
         }

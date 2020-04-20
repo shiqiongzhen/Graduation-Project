@@ -10,20 +10,20 @@
                         <p>{{form.userNumber}}</p>
                     </span>
                 </span>
-                <el-form ref="form" :model="form" label-width="120px">
+                <el-form ref="form" :rules="rules" :model="form" label-width="120px">
                     <el-form-item label="学生答案">
                         <tinymceEditor v-model="form.userExperimentText"></tinymceEditor>
                     </el-form-item>
-                    <el-form-item label="是否通过" :rules="{ required: true }">
+                    <el-form-item label="是否通过" prop="status">
                         <el-radio-group v-model="form.status">
                             <el-radio label="1">是</el-radio>
                             <el-radio label="0">否</el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="最终分数" v-if="form.status==1">
+                    <el-form-item label="最终分数" v-if="form.status==1" prop="experimentAchievement">
                         <el-input v-model="form.experimentAchievement"></el-input>
                     </el-form-item>
-                    <el-form-item label="老师评语" :rules="{ required: true }">
+                    <el-form-item label="老师评语" prop="teacherComment">
                         <el-input
                         type="textarea"
                         :rows="6"
@@ -35,7 +35,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">确定</el-button>
+                        <el-button type="primary" @click="onSubmit('form')">确定</el-button>
                         <el-button>取消</el-button>
                     </el-form-item>
                 </el-form>
@@ -65,6 +65,17 @@ export default {
             ],
             form: {},
             imageUrl: '',
+            rules: {
+                status: [
+                    { required: true, message: '不能为空', trigger: 'blur'  }
+                ],
+                teacherComment: [
+                    { required: true, message: '不能为空', trigger: 'blur'  }
+                ],
+                experimentAchievement: [
+                    { required: true, pattern: /^([1-9]?\d|0|100)$/, message: '不能为空或数值应在0~100之间的整数', trigger: 'blur'  }
+                ]
+            },
         };
     },
     computed: {
@@ -96,32 +107,36 @@ export default {
 
     },
     methods: {
-      onSubmit() {
-        this.$http.post(`/teaching/teacher/achievement/judge/save`,{
-            "userExperimentId": this.form.userExperimentId,
-            "teacherComment": this.form.teacherComment,
-            "status": this.form.status,
-            "experimentAchievement": this.form.experimentAchievement
-        }
-        ).then((res) => { 
-            if(res.data.code == "0"){
-                this.$message({
-                    message: "打分成功！",
-                    type: 'success'
-                });
-                this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`); 
-            }else if (res.data.code == "1") {
-                this.$router.push('/login'); 
-            }else{
-                this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                });
-            }
-            this.loading=false
-        })
-        .catch(function (error) {
-            console.log(error)
+      onSubmit(formName) {
+        this.$refs[formName].validate((valid) => {
+            if (valid) {
+                this.$http.post(`/teaching/teacher/achievement/judge/save`,{
+                    "userExperimentId": this.form.userExperimentId,
+                    "teacherComment": this.form.teacherComment,
+                    "status": this.form.status,
+                    "experimentAchievement": this.form.experimentAchievement
+                }
+                ).then((res) => { 
+                    if(res.data.code == "0"){
+                        this.$message({
+                            message: "打分成功！",
+                            type: 'success'
+                        });
+                        this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`); 
+                    }else if (res.data.code == "1") {
+                        this.$router.push('/login'); 
+                    }else{
+                        this.$message({
+                            message: res.data.msg,
+                            type: 'error'
+                        });
+                    }
+                    this.loading=false
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+             }
         })
       },
       handleAvatarSuccess(res, file) {

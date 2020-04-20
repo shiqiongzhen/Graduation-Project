@@ -67,7 +67,7 @@ export default new Router({
                 component: () => import('@/page/display/courseExperiment/doExperiment/resource')
               },
               {
-                path: '/courseList/:courseId/answer/:experimentId',
+                path: '/courseList/:courseId/answer/:experimentId/:experimentAnswerId',
                 component: () => import('@/page/display/courseExperiment/doExperiment/answer')
               },
               {

@@ -102,7 +102,7 @@ export default {
                     { validator: validatePass2, trigger: 'blur' }
                 ],
                 oldPass: [
-                    { required: true, message: '旧密码不能为空', trigger: 'change'  }
+                    { required: true, message: '旧密码不能为空', trigger: 'blur'  }
                 ]
             }
 

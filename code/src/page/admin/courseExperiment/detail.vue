@@ -23,7 +23,7 @@
                             <img src="@/assets/image/logo/logo80.png" alt="">
                         </div>
                         <span class="description">
-                            <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+                            <el-form ref="detail" :rules="rules" :model="detail" label-width="120px">
                                 <el-form-item label="课程名称" prop="experimentName">
                                     <el-input v-model="detail.experimentName"></el-input>
                                 </el-form-item>
@@ -63,7 +63,7 @@
                                     </el-form-item>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button size="small" type="primary" @click="updateInfo('form')">确定</el-button>
+                                    <el-button size="small" type="primary" @click="updateInfo('detail')">确定</el-button>
                                     <el-button size="small" type="info" @click="closeInfo()">取消</el-button>
                                 </el-form-item>
                             </el-form>
@@ -228,10 +228,10 @@ export default {
             },
             rules: {
                 experimentName: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 valve: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ]
             },
             experimentDetailFile: [], //.experimentDetailFile
@@ -432,6 +432,7 @@ export default {
                         message: res.data.msg,
                         type: 'success'
                     });
+                    this.init()
                     this.isLock=true
                 }else if (res.data.code == "1") {
                     this.$router.push('/login'); 
@@ -454,6 +455,7 @@ export default {
                         message: res.data.msg,
                         type: 'success'
                     });
+                    this.init()
                     this.isLock=false
                 }else if (res.data.code == "1") {
                     this.$router.push('/login'); 
@@ -476,6 +478,7 @@ export default {
                         message: res.data.msg,
                         type: 'success'
                     });
+                    this.init()
                     this.isOver=true
                 }else if (res.data.code == "1") {
                     this.$router.push('/login'); 

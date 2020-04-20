@@ -37,7 +37,7 @@
                         <img src="@/assets/image/logo/logo80.png" alt="">
                     </div>
                     <span class="description">
-                        <el-form ref="form" :rules="rules" label-width="120px">
+                        <el-form ref="detail" :rules="rules" :model="detail" label-width="120px">
                             <el-form-item label="老师名称" prop="teacherNickname">
                                 {{detail.teacherNickname}}
                             </el-form-item>
@@ -51,7 +51,7 @@
                                 <el-input v-model="detail.courseCredit"></el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button size="small" type="primary" @click="updateInfo('form')">确定</el-button>
+                                <el-button size="small" type="primary" @click="updateInfo('detail')">确定</el-button>
                                 <el-button size="small" type="info" @click="closeInfo()">取消</el-button>
                             </el-form-item>
                         </el-form>
@@ -122,16 +122,16 @@ export default {
             editMessage: false,
             rules: {
                 experimentName: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 courseName: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 courseCode: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 courseCredit: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ]
             },
         };
@@ -148,9 +148,10 @@ export default {
     filters: {
       courseStatus: (value) => {
         switch(value){
-            case 1:return '进行中';break;
-            case 2:return '锁定中';break;
-            case 3:return '已结束';break;
+            case 0:return '正常';break;
+            case 1:return '锁定';break;
+            case 2:return '删除';break;
+            case 3:return '结束';break;
             default:return '';
         }
       },

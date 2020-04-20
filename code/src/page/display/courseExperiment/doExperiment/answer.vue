@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <spin :loading="loading"/>
-        <div class="empty" v-if="!loading&&!answerContent&&!experimentAnswerFileList">
+        <div class="empty" v-if="!loading && !answerContent && (answerFileList.length==0)">
             <img src="@/assets/image/empty/answer.png" alt="">
             <p>这里暂无答案哦，快提醒老师上传吧</p>
         </div>
@@ -43,32 +43,37 @@ export default {
 
     },
     created() {
-        this.$http.get(`/teaching/student/experiment/answer/${this.$route.params.experimentId}`
-        ).then((res) => {    
-            if(res.data.code == "0"){
-                this.$confirm("提前查看答案会扣除一定比例的分数，是否继续？", '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.answerContent = res.data.data.experimentAnswerContent||""
-                    this.answerFileList = res.data.data.experimentAnswerFileList||[]
-                    this.loading=false
-                }).catch(() => {
-                    this.$router.push(`/courseList/${this.$route.params.courseId}/content/${this.$route.params.experimentId}`)
-                });
-            }else if (res.data.code == "1") {
-                this.$router.push('/login'); 
-            }else{
-                this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                });
-            }
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+        if(this.$route.params.experimentAnswerId!="null"){
+             this.$http.get(`/teaching/student/experiment/answer/${this.$route.params.experimentAnswerId}`
+            ).then((res) => {    
+                if(res.data.code == "0"){
+                    this.$confirm("提前查看答案会扣除一定比例的分数，是否继续？", '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.answerContent = res.data.data.experimentAnswerContent||""
+                        this.answerFileList = res.data.data.experimentAnswerFileList||[]
+                        this.loading=false
+                    }).catch(() => {
+                        this.$router.push(`/courseList/${this.$route.params.courseId}/content/${this.$route.params.experimentId}`)
+                    });
+                }else if (res.data.code == "1") {
+                    this.$router.push('/login'); 
+                }else{
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+        }else{
+            console.log("wu1",this.$route.params.experimentAnswerId)
+            this.loading=false
+        }
     },
     mounted() {
 

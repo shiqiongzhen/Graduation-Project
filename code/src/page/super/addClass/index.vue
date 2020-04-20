@@ -123,19 +123,19 @@ export default {
             form:[],
             rules: {
                 className: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 college: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 series: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 major: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 student: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
             }
         };

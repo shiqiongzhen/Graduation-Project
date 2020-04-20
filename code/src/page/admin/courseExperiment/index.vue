@@ -26,8 +26,9 @@
                 </div>
                 <div class="right">
                     <div class="linkDetail"><i class="el-icon-info"></i> 详情</div>
-                    <div v-if="item.experimentCommitNum==0"><i class="el-icon-lock"></i>未解锁</div>
-                    <div v-if="item.experimentCommitNum==1" style="color:#5CB3FF;"><i class="el-icon-unlock"></i>已解锁</div>
+                    <div v-if="item.experimentStatus==0"><i class="el-icon-lock"></i>未解锁</div>
+                    <div v-if="item.experimentStatus==1" style="color:#5CB3FF;"><i class="el-icon-unlock"></i>已解锁</div>
+                    <div v-if="item.experimentStatus==3" style="color:#bababa;"><i class="el-icon-remove-outline"></i>已结束</div>
                 </div>
             </div>
         </div>

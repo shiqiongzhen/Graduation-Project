@@ -133,19 +133,19 @@ export default {
             },
             rules: {
                 experimentName: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 experimentText: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 experimentStatus: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
                 valve: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, pattern: /^(0.\d+|0|1)$/, message: '不能为空或数值应在0~1之间', trigger: 'blur'  }
                 ],
                 punishment: [
-                    { required: true, message: '不能为空', trigger: 'change'  }
+                    { required: true, pattern: /^(0.\d+|0|1)$/, message: '不能为空或数值应在0~1之间', trigger: 'blur'  }
                 ]
             },
             fileList: [],
