@@ -98,10 +98,10 @@ export default {
         }).then((res) => { 
             if(res.data.code == "0"){
                 this.$message({
-                    message: "成功新增课程！",
+                    message: "修改学生成功",
                     type: 'success'
                 });
-                this.$router.push(`/admin/courseList/experiment/${this.$route.params.courseId}`); 
+                this.$router.push(`/admin/courseList/manage/${this.$route.params.courseId}`); 
             }else if (res.data.code == "1") {
                 this.$router.push('/login'); 
             }else{

@@ -67,8 +67,31 @@ export default {
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
         images_upload_handler: (blobInfo, success, failure) => {
-          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
-          success(img)
+          // const img = 'data:image/jpeg;base64,' + blobInfo.base64()
+          // success(img)
+          if (blobInfo.blob().size > 1048576) {
+              failure('文件体积过大')
+          }
+          // 发送到后台，传送到阿里云oss，返回上传后的网络地址
+          var xhr, formData;
+          xhr = new XMLHttpRequest();
+          xhr.withCredentials = false;
+          xhr.open('POST', '/teaching/common/file/uploadPic');
+          xhr.onload = function() {
+              if (xhr.status != 200) {
+                  failure('HTTP Error: ' + xhr.status);
+                  return;
+              }
+              const result = JSON.parse(this.responseText);
+              if (!result || typeof result.data.url != 'string') {
+                  failure('Invalid JSON: ' + xhr.responseText);
+                  return;
+              }
+              success(result.data.url);
+          }
+          formData = new FormData();
+          formData.append('file', blobInfo.blob());
+          xhr.send(formData);
         }
       },
       myValue: this.value

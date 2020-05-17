@@ -15,7 +15,8 @@
                 <img src="@/assets/image/file/pdf.png" alt="" v-if="item.fileType=='pdf'">
                 <img src="@/assets/image/file/excel.png" alt="" v-if="item.fileType=='excel'">
                 <img src="@/assets/image/file/txt.png" alt="" v-if="item.fileType=='txt'">
-                <img src="@/assets/image/file/default.png" alt="" v-if="['doc','ppt','pdf','excel','txt'].indexOf(item.fileType)==-1">
+                <img src="@/assets/image/file/rar.png" alt="" v-if="item.fileType=='rar' || item.fileType=='zip'">
+                <img src="@/assets/image/file/default.png" alt="" v-if="['doc','ppt','pdf','excel','txt','rar','zip'].indexOf(item.fileType)==-1">
                 <span class="description">
                     <h4>{{item.fileName||"无"}}</h4>
                     <div>{{item.fileSize||0}}</div>

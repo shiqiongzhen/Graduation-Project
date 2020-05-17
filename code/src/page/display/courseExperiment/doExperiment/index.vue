@@ -50,6 +50,7 @@
                         <span class="statusTwo ball" v-if="item.recordStatus=='2'"></span>
                         <span class="statusThree ball" v-if="item.recordStatus=='3'"></span>
                         <span class="statusFour ball" v-if="item.recordStatus=='4'"><i class="el-icon-lock"></i></span>
+                        <span class="statusFive ball" v-if="item.recordStatus=='5'"></span>
                         <span>{{item.recordStatus | recordStatus}}</span>
                     </div>
                 </li>
@@ -97,6 +98,7 @@ export default {
             case 2:return '未通过';break;
             case 3:return '未提交';break;
             case 4:return '未解锁';break;
+            case 5:return '已结束';break;
             default:return '';
         }
       },
@@ -306,6 +308,9 @@ export default {
                 }
                 .statusThree{
                     background-color:#909399;
+                }
+                .statusFive{
+                    background-color:#E1E1E1;
                 }
             }
         }

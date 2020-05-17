@@ -20,7 +20,9 @@
             <div class="message" v-if="editMessage==false">
                 <div class="item">
                     <span class="image">
-                        <img src="@/assets/image/logo/logo100.png" alt="">
+                        <!-- <img src="@/assets/image/logo/logo100.png" alt=""> -->
+                        <img v-if="detail.courseCover!=''" :src="detail.courseCover">
+                        <img v-if="detail.courseCover==''" src="@/assets/image/logo/logo100.png"> 
                     </span>
                     <span class="description">
                         <div>老师：{{detail.teacherNickname}}</div>
@@ -34,7 +36,19 @@
             <div class="editMessage" v-else>
                 <div class="item">
                     <div class="imageBox">
-                        <img src="@/assets/image/logo/logo80.png" alt="">
+                        <!-- <img src="@/assets/image/logo/logo100.png" alt=""> -->
+                        <el-upload
+                        class="avatar-uploader"
+                        action="/teaching/common/file/uploadPic"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                        <div class="uploadBox">
+                            <img v-if="detail.courseCover" :src="detail.courseCover" class="avatar">
+                            <span v-if="detail.courseCover" class="avatar-label">编辑封面</span>
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </div>
+                        </el-upload>
                     </div>
                     <span class="description">
                         <el-form ref="detail" :rules="rules" :model="detail" label-width="120px">
@@ -157,16 +171,32 @@ export default {
       },
     },
     methods: {
+        handleAvatarSuccess(res, file) {
+            this.detail.courseCover = res.data.url;
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
         updateInfo(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.$http.post(`/teaching/teacher/course/updateCourseInfo`,{
                         "courseId": this.$route.params.courseId, 
-                            "courseDetailId": this.detail.courseDetailId,
-                            "courseCode": this.detail.courseCode,
-                            "courseName": this.detail.courseName,
-                            "courseCredit": this.detail.courseCredit
-                        }
+                        "courseDetailId": this.detail.courseDetailId,
+                        "courseCode": this.detail.courseCode,
+                        "courseName": this.detail.courseName,
+                        "courseCredit": this.detail.courseCredit,
+                        "courseCover": this.detail.courseCover
+                    }
                     ).then((res) => { 
                         if(res.data.code == "0"){
                             this.editMessage = false
@@ -425,6 +455,40 @@ export default {
                 // width: 15%;
                 // box-sizing: border-box;
                 border-right: 1px solid#E9E9E9;
+                .uploadBox{
+                    border: 1px dashed #d9d9d9;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    position: relative;
+                    overflow: hidden;
+                    &:hover{
+                        border-color: #409EFF;
+                    }
+                    .avatar-uploader-icon{
+                        font-size: 28px;
+                        color: #8c939d;
+                        width: 100px;
+                        height: 100px;
+                        line-height: 100px;
+                        text-align: center;
+                    }
+                    .avatar {
+                        width: 100px;
+                        height: 100px;
+                        display: block;
+                        position: relative;
+                    }
+                    .avatar-label{
+                        position: absolute;
+                        bottom: 0;
+                        background: #73A2CF;
+                        color: #FFFFFF;
+                        font-size: 12px;
+                        display: block;
+                        text-align: center;
+                        width: 100%;
+                    }
+                }
             }
             .description{
                 border-left: 1px solid #E5E5E5;
