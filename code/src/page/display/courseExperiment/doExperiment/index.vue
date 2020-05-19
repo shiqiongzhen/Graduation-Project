@@ -142,8 +142,8 @@ export default {
                             this.isDisable=false // 能提交
                         }
                     }
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -159,8 +159,8 @@ export default {
             ).then((res) => { 
                 if(res.data.code == "0"){
                     this.experimentList = res.data.data.experimentDTOList
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

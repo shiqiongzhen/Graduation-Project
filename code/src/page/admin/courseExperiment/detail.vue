@@ -328,8 +328,8 @@ export default {
                         message: "更新成功！",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -356,8 +356,8 @@ export default {
                         message: "更新成功！",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -383,8 +383,8 @@ export default {
                         message: "更新成功！",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -410,8 +410,8 @@ export default {
                         message: "更新成功！",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -434,8 +434,8 @@ export default {
                     });
                     this.init()
                     this.isLock=true
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -457,8 +457,8 @@ export default {
                     });
                     this.init()
                     this.isLock=false
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -480,8 +480,8 @@ export default {
                     });
                     this.init()
                     this.isOver=true
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -498,8 +498,8 @@ export default {
             ).then((res) => { 
                 if(res.data.code == "0"){
                     this.$router.push(`/admin/courseList/experiment/${this.$route.params.courseId}`)
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -576,8 +576,8 @@ export default {
                     if(this.detail.experimentStatus==0){
                         this.isLock=false
                     }
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

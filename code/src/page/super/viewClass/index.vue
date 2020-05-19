@@ -277,8 +277,8 @@ export default {
                         message: "状态已停用",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -303,8 +303,8 @@ export default {
                         message: "状态已恢复",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -462,8 +462,8 @@ export default {
                     this.initData()
                     this.initIsStopAndIsShowDel(this.tableData)
                     this.paginations.total = res.data.data.total
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

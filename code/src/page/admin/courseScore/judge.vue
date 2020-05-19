@@ -86,8 +86,8 @@ export default {
             ).then((res) => { 
                 if(res.data.code == "0"){
                     this.form = res.data.data
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

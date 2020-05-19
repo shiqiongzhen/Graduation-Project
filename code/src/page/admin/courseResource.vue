@@ -151,8 +151,8 @@ export default {
                 if(res.data.code == "0"){
                     // this.courseName = res.data.data.courseName || ""
                     this.experimentList = res.data.data
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

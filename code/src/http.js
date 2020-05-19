@@ -2,8 +2,8 @@ import axios from 'axios';
 import router from './router';
 
 // axios 配置
-axios.defaults.timeout = 8000;
-axios.defaults.baseURL = '/';
+// axios.defaults.timeout = 8000;
+// axios.defaults.baseURL = '/';
 
 // http request 拦截器
 axios.interceptors.request.use(
@@ -21,9 +21,12 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    if (response.data.errno === 999) {
-      router.replace('/');
-      console.log("token过期");
+    // if (response.data.errno === 999) {
+    //   router.replace('/');
+    //   console.log("token过期");
+    // }
+    if (response.data.code == "1") {
+        router.push('/login'); 
     }
     return response;
   },

@@ -125,8 +125,8 @@ export default {
 
                     this.classList=res.data.data.classList
                     this.checkList.push(this.classList[0].classId)
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

@@ -232,8 +232,8 @@ export default {
                         message: "更新成功！",
                         type: 'success'
                     });
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -262,8 +262,8 @@ export default {
                         type: 'success'
                     });
                     this.isLock=true
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -284,8 +284,8 @@ export default {
                         type: 'success'
                     });
                     this.isLock=false
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -306,8 +306,8 @@ export default {
                         type: 'success'
                     });
                     this.isOver=true
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
@@ -366,8 +366,8 @@ export default {
                     if(this.detail.courseStatus==0){
                         this.isLock=false
                     }
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

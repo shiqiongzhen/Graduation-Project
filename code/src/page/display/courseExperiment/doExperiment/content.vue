@@ -36,8 +36,8 @@ export default {
                     if(res.data.data.experiment){
                         this.experimentText = res.data.data.experiment.experimentText
                     }
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

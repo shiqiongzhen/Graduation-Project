@@ -138,8 +138,8 @@ export default {
                     this.user = res.data.data.user
                     this.list = res.data.data.list
                     this.paginations.total = res.data.data.total
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

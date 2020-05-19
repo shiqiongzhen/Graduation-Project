@@ -77,8 +77,8 @@ export default {
                 if(res.data.code == "0"){
                     this.fromData = res.data.data.studentForSelect
                     this.toData =  res.data.data.studentHadSelect
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,

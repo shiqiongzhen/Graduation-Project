@@ -119,8 +119,8 @@ export default {
                 if(res.data.code == "0"){
                     this.normalList = res.data.data.normal
                     this.endList = res.data.data.end
-                }else if (res.data.code == "1") {
-                    this.$router.push('/login'); 
+                // }else if (res.data.code == "1") {
+                    //  this.$router.push('/login'); 
                 }else{
                     this.$message({
                         message: res.data.msg,
