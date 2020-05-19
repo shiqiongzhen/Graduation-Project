@@ -93,6 +93,7 @@
                                 localStorage.setItem('userAccount', this.userInfo.account)
                                 localStorage.setItem('userPass', this.userInfo.password) 
                             }
+                            localStorage.setItem('token', res.data.data.token) 
                             localStorage.setItem('nickname', res.data.data.nickname)
                             localStorage.setItem('headUrl', res.data.data.headUrl) 
                             localStorage.setItem('userId', res.data.data.userId) 

@@ -33,6 +33,16 @@ export default new Router({
             ]
           },
           { 
+            path: '/notice', 
+            component: () => import('@/page/display/notice'),
+            children: [
+              { 
+                path: '/myNotice', 
+                component: () => import('@/page/display/myNotice'),
+              },
+            ]
+          },
+          { 
             path: '/courseList/:courseId',
             component: () => import('@/page/display/course'),
             children: [

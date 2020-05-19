@@ -15,7 +15,9 @@
                         </span>
                         <span class="notice"
                             @mouseover="selectNotice"
-                            @mouseout="outNotice"><img :src="noticeSrc" alt=""></span>
+                            @mouseout="outNotice">
+                            <router-link  to = "/notice"><img :src="noticeSrc" alt=""></router-link>
+                        </span>
                         <span class="loginOut" @click="loginOut">退出</span>
                     </span>
                 </div>
