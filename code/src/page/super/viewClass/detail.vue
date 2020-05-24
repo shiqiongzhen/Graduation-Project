@@ -38,23 +38,23 @@
             </div>
             <div class="content">
                 <div v-for="(item,index) in list" :key="index">
-                    <a class="item" href="">
+                    <div class="item">
                         <span class="intro">
                             <img v-if="item.courseCover!=''" :src="item.courseCover" alt="">
                             <img v-else src="@/assets/image/logo/logo80.png" alt="">
                             <span class="description">
-                                <p>{{item.courseName}}</p>
+                                <p style="font-weight: bold;">{{item.courseName}}</p>
                                 <p>{{item.courseIntroduction}}</p>
                             </span>
                         </span>
                         <span class="time">
-                            <p>开始时间</p>
+                            <p style="font-weight: bold;">开始时间</p>
                             <p>{{item.createTime}}</p>
                         </span>
-                        <span class="link">
+                        <!-- <span class="link">
                             编辑
-                        </span>
-                    </a>
+                        </span> -->
+                    </div>
                 </div>
                 <el-pagination
                 layout="prev, pager, next, jumper"

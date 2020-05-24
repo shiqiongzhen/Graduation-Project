@@ -399,6 +399,7 @@ export default {
         },
         updateAnswerFile(){
             this.$http.post(`/teaching/teacher/experiment/updateExperimentAnswerFile`,{
+                    "experimentId": this.detail.experimentId,
                     "experimentAnswerId":this.detail.experimentAnswerId,
                     "experimentAnswerFile": this.filterFiles(this.detail.experimentAnswerFile,this.experimentAnswerFile)
                 }

@@ -12,64 +12,18 @@
                 </ul>
             </div>
             <div class="rightContainner" v-if="containner=='systemNotice'">
-                <div class="title">
+                <div class="contentTitle">
                     系统通知
                 </div>
                 <div class="content">
-                    <div class="headInfo">
-                        <img :src="headUrl" alt="">
-                        <div>{{userInfo.nickname}}</div>
-                    </div>
-                    <div class="navTitle">
-                        <span class="subTitle">基本信息</span>
-                        <i @click="editMessage=!editMessage" class="el-icon-edit-outline"></i>
-                    </div>
-                    <div class="userInfo" v-if="editMessage==false">
-                        <div><span class="label">姓名</span><span>{{userInfo.nickname}}</span></div>
-                        <div><span class="label">身份</span><span>{{userInfo.userIdent}}</span></div>
-                        <div><span class="label">学号/工号</span><span>{{userInfo.userNumber}}</span></div>
-                        <div><span class="label">所在院</span><span>{{userInfo.college}}</span></div>
-                        <div><span class="label">所在系</span><span>{{userInfo.series}}</span></div>
-                        <div><span class="label">所在专业</span><span>{{userInfo.major}}</span></div>
-                        <div><span class="label">班级</span><span>{{userInfo.className}}</span></div>
-                        <div><span class="label">手机号码</span><span>{{userInfo.phone}}</span></div>
-                        <div><span class="label">邮箱</span><span>{{userInfo.mail}}</span></div>
-                    </div>
-                    <div v-else class="userInfo">
-                        <el-form ref="form" :rules="rules" :model="userInfo" label-width="120px">
-                            <el-form-item label="姓名">
-                                <el-input v-model="userInfo.nickname" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="身份">
-                                <el-input v-model="userInfo.userIdent" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="学号/工号">
-                                <el-input v-model="userInfo.userNumber" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="所在院">
-                                <el-input v-model="userInfo.college" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="所在系">
-                                <el-input v-model="userInfo.series" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="所在专业">
-                                <el-input v-model="userInfo.major" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="班级">
-                                <el-input v-model="userInfo.className" disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="手机号码" prop="phone">
-                                <el-input v-model="userInfo.phone"></el-input>
-                            </el-form-item>
-                            <el-form-item label="邮箱" prop="mail">
-                                <el-input v-model="userInfo.mail"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button size="small" type="primary" @click="updateInfo('form')">确定</el-button>
-                                <el-button size="small" type="info" @click="closeInfo()">取消</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div>
+                    <div class="readTitle"><span @click="allRead()">全部标记已读</span></div>
+                    <ul>
+                        <li  v-for="(item,index) in noticeList" :key="index">
+                            <div class="title">{{item.tittle||"无"}}</div>
+                            <div class="time">{{item.time||0}}</div>
+                            <div class="message">{{item.msg}} <router-link  :to = "item.routerUrl">>>点击查看>></router-link></div>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="rightContainner" v-if="containner=='myNotice'">
@@ -87,43 +41,27 @@ export default {
     data() {
         return {
             containner: 'systemNotice',
-            headUrl: localStorage.getItem('headUrl')||"",
             editMessage: false,
-            userInfo: {
-                userId: '',
-                nickname: "",
-                userNumber: "",
-                headUrl: "",
-                userIdent: "",
-                mail: "",
-                phone: "",
-                college: "",
-                series: "",
-                major: "",
-                className: ""
-            },
-            rules: {
-                phone: [
-                    { required: true, message: '不能为空', trigger: 'blur'  }
-                ],
-                mail: [
-                    { required: true, message: '不能为空', trigger: 'blur'  }
-                ]
-            }
+            noticeList: [],
+            messageIdList: []
         };
     },
     computed: {
 
     },
     created() {
-        this.$http.get(`/teaching/user/info/${localStorage.getItem('userId')}`
+        this.$http.get(`/teaching/message/systemMessage`
         ).then((res) => { 
             if(res.data.code == "0"){
-                this.userInfo = res.data.data
-            }else if (res.data.code == "1") {
-                this.$router.push('/login'); 
+                this.noticeList = res.data.data
+                this.messageIdList = this.noticeList.map(item => item.messageId)
+            // }else if (res.data.code == "1") {
+            //     this.$router.push('/login'); 
             }else{
-                this.userInfo=res.data.data
+                this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                });
             }
         })
         .catch(function (error) {
@@ -178,6 +116,29 @@ export default {
                 }
             })
         },
+        allRead(){
+            this.$http.post(`/teaching/message/messageRead`, {
+                messageIdList: this.messageIdList
+            }
+            ).then((res) => { 
+                if(res.data.code == "0"){
+                    this.$message({
+                        message: "更新成功！",
+                        type: 'success'
+                    });
+                // }else if (res.data.code == "1") {
+                //     this.$router.push('/login'); 
+                }else{
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+        }
     },
     components: {
 
@@ -202,7 +163,7 @@ export default {
             background: #FFFFFF;
             height: 350px;
             float: left;
-            width: 15%;
+            width: 20%;
             text-align: center;
             box-sizing: border-box;
             .title{
@@ -235,8 +196,8 @@ export default {
             margin-top: 20px;
             height: 100%;
             float: right;
-            width: 83%;
-            .title{
+            width: 78%;
+            .contentTitle{
                 background: #FFFFFF;
                 height: 40px;
                 line-height: 40px;
@@ -246,45 +207,49 @@ export default {
                 margin-bottom: 21px;
             }
             .content{
-                padding:10px;
+                padding:0 27px;
                 background: #FFFFFF;
-                .headInfo{
-                    text-align: center;
-                    img{
-                        width: 80px;
-                        height: 80px;
-                        border-radius: 50%;
-                        background:#D8D8D8; 
-                    }
-                }
-                // .title{
-                //     font-size: 0.5em;
-                // }
-                .navTitle{
-                    padding:10px;
-                    position: relative;
-                    border-bottom: 1px solid #E9E9E9;
-                    font-weight: bold;
-                    height: 1em;
-                    .subTitle{
-                        float: left;
-                    }
-                    i{
+                .readTitle{
+                    border-bottom: 1px solid #E1E1E1;
+                    span{
+                        color: #7D7D7D;
+                        line-height: 50px;
+                        height: 50px;
                         float: right;
+                        cursor: pointer;
                     }
                     @include clearfix;
                 }
-                .userInfo{
-                    line-height: 2.5em;
-                    padding:1em;
-                    .label{
-                        width: 100px;
-                        display: inline-block;
+                ul{
+                    li{
+                        padding: 24px 0;
+                        border-bottom: 1px solid #E1E1E1;
+                        .title{
+                            font-size: 16px;
+                            color: #787878;
+                            line-height: 22px;
+                            font-weight: 600;
+                            font-family: PingFangSC, PingFangSC-Semibold;
+                        }
+                        .time{
+                            font-size: 12px;
+                            color: #B3B3B3;
+                            line-height: 17px;
+                            margin-bottom: 10px;
+                            font-weight: 400;
+                            font-family: PingFangSC, PingFangSC-Regular;
+                        }
+                        .message{
+                            font-size: 14px;
+                            color: #7D7D7D;
+                            line-height: 20px;
+                            font-weight: 500;
+                            font-family: PingFangSC, PingFangSC-Medium;
+                        }
                     }
                 }
             }
         }
     }
-    @include clearfix;
 }
 </style>

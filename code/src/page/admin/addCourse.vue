@@ -40,9 +40,8 @@
                     <el-form-item label="设置课程封面">
                         <el-upload
                         class="avatar-uploader"
-                        action="/teaching/common/file/uploadPic"
+                        action=""
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
                         <div class="uploadBox">
                             <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
@@ -52,7 +51,7 @@
                     </el-form-item>
                     <el-form-item class="footer">
                         <el-button type="primary" @click="onSubmit">确定</el-button>
-                        <el-button>取消</el-button>
+                        <el-button @click="cancle">取消</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -151,9 +150,12 @@ export default {
             console.log(error)
         })
       },
-      handleAvatarSuccess(res, file) {
-        this.form.imageUrl = res.data.url;
+      cancle(){
+        this.$router.push('/admin'); 
       },
+    //   handleAvatarSuccess(res, file) {
+    //     this.form.imageUrl = res.data.url;
+    //   },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
@@ -164,7 +166,21 @@ export default {
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
-        return isJPG && isLt2M;
+        if(isJPG && isLt2M){
+            var formData = new FormData();
+            formData.append('file', file);
+            this.$http.post(`/teaching/common/file/uploadPic`,formData).then(res=>{
+                this.form.imageUrl = res.data.data.url
+            }).catch(error=>{
+                this.$message({
+                    message: `上传失败！${error}`,
+                    type: 'error'
+                });
+            })
+            return false // 返回false不会自动上传
+        }else{
+            return false
+        }
       },
       // 切换模式 现有树形穿梭框模式transfer 和通讯录模式addressList
       changeMode() {

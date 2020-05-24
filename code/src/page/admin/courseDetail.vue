@@ -37,11 +37,12 @@
                 <div class="item">
                     <div class="imageBox">
                         <!-- <img src="@/assets/image/logo/logo100.png" alt=""> -->
+                        <!-- action="/teaching/common/file/uploadPic" 
+                        :on-success="handleAvatarSuccess"-->
                         <el-upload
                         class="avatar-uploader"
-                        action="/teaching/common/file/uploadPic"
+                        action=""
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
                         <div class="uploadBox">
                             <img v-if="detail.courseCover" :src="detail.courseCover" class="avatar">
@@ -171,9 +172,9 @@ export default {
       },
     },
     methods: {
-        handleAvatarSuccess(res, file) {
-            this.detail.courseCover = res.data.url;
-        },
+        // handleAvatarSuccess(res, file) {
+        //     this.detail.courseCover = res.data.url;
+        // },
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 2;
@@ -184,7 +185,21 @@ export default {
             if (!isLt2M) {
             this.$message.error('上传头像图片大小不能超过 2MB!');
             }
-            return isJPG && isLt2M;
+            if(isJPG && isLt2M){
+                var formData = new FormData();
+                formData.append('file', file);
+                this.$http.post(`/teaching/common/file/uploadPic`,formData).then(res=>{
+                    this.detail.courseCover = res.data.data.url
+                }).catch(error=>{
+                    this.$message({
+                        message: `上传失败！${error}`,
+                        type: 'error'
+                    });
+                })
+                return false // 返回false不会自动上传
+            }else{
+                return false
+            }
         },
         updateInfo(formName){
             this.$refs[formName].validate((valid) => {
