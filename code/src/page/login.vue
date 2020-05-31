@@ -76,17 +76,17 @@
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    // this.$http.post('/teaching/user/loginForTest', this.Qs.stringify({
-                    //     "userNumber":this.userInfo.userNumber,
-                    //     "password":this.userInfo.pass,
-                    //     "ident":this.userInfo.ident
-                    // }))
-                    this.$http.post('/teaching/user/login', this.Qs.stringify({
+                    this.$http.post('/teaching/user/loginForTest', this.Qs.stringify({
                         "userNumber":this.userInfo.userNumber,
                         "password":this.userInfo.pass,
-                        "verifyCode":this.userInfo.verifyCode,
                         "ident":this.userInfo.ident
                     }))
+                    // this.$http.post('/teaching/user/login', this.Qs.stringify({
+                    //     "userNumber":this.userInfo.userNumber,
+                    //     "password":this.userInfo.pass,
+                    //     "verifyCode":this.userInfo.verifyCode,
+                    //     "ident":this.userInfo.ident
+                    // }))
                     .then((res) => {
                         if(res.data.code == 0){
                             if(this.checked){

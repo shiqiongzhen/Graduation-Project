@@ -39,6 +39,12 @@ export default new Router({
               { 
                 path: '/myNotice', 
                 component: () => import('@/page/display/myNotice'),
+                children:[
+                  { 
+                    path: '/myNotice/:chatId', 
+                    component: () => import('@/page/display/chat')
+                  }
+                ]
               },
             ]
           },

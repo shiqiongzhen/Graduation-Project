@@ -147,8 +147,8 @@ export default {
                     this.list.push(item)
                 })
                 this.initIsConfirm(this.list)
-            }else if (response.code == "1") {
-                this.$router.push('/login'); 
+            // }else if (response.code == "1") {
+            //     this.$router.push('/login'); 
             }else{
                 this.$message({
                     message: response.msg,

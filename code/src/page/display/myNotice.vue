@@ -3,56 +3,26 @@
         <div class="title">
             我的通知
         </div>
-        <ul class="content">
-            <li>
-                <div>
-                    <span><img src="@/assets/icon/lock.png" alt=""></span>
-                    <span><div>密码</div><div class="description">用于保护账号信息和登录安全</div></span>
-                </div>
-                <div><el-button size="medium" @click="isPass = true">修改密码</el-button></div>
-            </li>
-            <li>
-                <div>
-                    <span><img src="@/assets/icon/lock.png" alt=""></span>
-                    <span><div>联系方式</div><div class="description">关联手机后可以方便找回密码</div></span>
-                </div>
-                <div><el-button size="medium" @click="bindPhone = true">立即绑定</el-button></div>
-            </li>
-        </ul>
-        <el-dialog title="修改密码" :visible.sync="isPass" width="30%">
-            <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item prop="oldPass">
-                    <el-input v-model="form.oldPass" type="password" autocomplete="off" placeholder="请输入原密码"></el-input>
-                </el-form-item>
-                <el-form-item prop="newPass">
-                    <el-input v-model="form.newPass" type="password" autocomplete="off" placeholder="请输入新密码"></el-input>
-                </el-form-item>
-                <el-form-item prop="checkNewPass">
-                    <el-input v-model="form.checkNewPass" type="password" autocomplete="off" placeholder="请输入新密码"></el-input>
-                </el-form-item>
-                <el-form-item>
-                     <!-- <div slot="footer" class="dialog-footer"> -->
-                        <el-button @click="isPass = false">取 消</el-button>
-                        <el-button type="primary" @click="updatePass('form')">确 定</el-button>
-                    <!-- </div> -->
-                </el-form-item>
-            </el-form>
-        </el-dialog>
-
-        <el-dialog title="绑定手机号码" :visible.sync="bindPhone" width="30%">
-            <el-form :model="form">
-                <el-form-item label="手机号码" label-width="120px">
-                    <el-input v-model="form.oldPass" autocomplete="off" placeholder="请输入你的手机号码"></el-input>
-                </el-form-item>
-                <el-form-item label="短信验证码" label-width="120px">
-                    <el-input v-model="form.oldPass" autocomplete="off" placeholder="请输入新密码"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="bindPhone = false">取 消</el-button>
-                <el-button type="primary" @click="bindPhone = false">确 定</el-button>
+        <div class="content">
+            <!-- <el-input v-model="mess" style="width: 30%;"></el-input>
+            <el-button @click="websocketsend()">发消息</el-button> -->
+            <div class="leftList">
+                <div class="leftTitle">近期消息</div>
+                <ul>
+                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID)">
+                        <img v-if="item.targetHeadUrl" :src="item.targetHeadUrl" alt="">
+                        <img v-else src="@/assets/image/user/user80.png" alt="">
+                        <span class="description">
+                            <p>{{item.targetName}}</p>
+                            <p>{{item.content}}</p>
+                        </span>
+                    </li>
+                </ul>
             </div>
-        </el-dialog>
+            <div class="rightChat">
+                <router-view></router-view>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -62,57 +32,34 @@ export default {
 
     },
     data() {
-        var validatePass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入密码'));
-            } else {
-                if (this.form.checkNewPass !== '') {
-                    this.$refs.form.validateField('checkNewPass');
-                }
-                callback();
-            }
-        };
-        var validatePass2 = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请再次输入密码'));
-            } else if (value !== this.form.newPass) {
-                callback(new Error('两次输入密码不一致!'));
-            } else {
-                callback();
-            }
-        };
         return {
-            isPass: false,
-            bindPhone: false,
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            rules: {
-                newPass: [
-                    { validator: validatePass, trigger: 'blur' }
-                ],
-                checkNewPass: [
-                    { validator: validatePass2, trigger: 'blur' }
-                ],
-                oldPass: [
-                    { required: true, message: '旧密码不能为空', trigger: 'blur'  }
-                ]
-            }
-
+            websock: null,
+            noticeList: [],
+            mess: ""
         };
     },
     computed: {
 
     },
     created() {
-
+        this.$http.get(`/teaching/message/conversationList`
+        ).then((res) => { 
+            if(res.data.code == "0"){
+                this.noticeList = res.data.data.conversations
+                Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.$router.push({ path: `/myNotice/${this.noticeList[0].conversationID}`, query: { targetName: this.noticeList[0].targetName } })
+            // }else if (res.data.code == "1") {
+            //     this.$router.push('/login'); 
+            }else{
+                this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                });
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+        this.initWebSocket();
     },
     mounted() {
 
@@ -121,36 +68,9 @@ export default {
 
     },
     methods: {
-        updatePass(formName){
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.$http.post(`/teaching/user/updatePassWord`,this.Qs.stringify({
-                        "oldPassword": this.form.oldPass,
-                        "newPassword": this.form.newPass
-                    })).then((res) => {    
-                        if(res.data.code == "0"){
-                            this.$message({
-                                message: '修改成功！',
-                                type: 'success'
-                            });
-                        }else if (res.data.code == "1") {
-                            this.$router.push('/login'); 
-                        }else{
-                            this.$message({
-                                message: res.data.msg,
-                                type: 'error'
-                            });
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-                    this.isPass = false 
-                } else {
-                    return false;
-                }
-            });
-        },
+        routeToChat(id){
+            this.$router.push(`/myNotice/${id}`)
+        }
     },
     components: {
 
@@ -159,6 +79,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/style/common/mixin.scss';
 .page{
     .title{
         background: #FFFFFF;
@@ -170,20 +91,64 @@ export default {
         margin-bottom: 21px;
     }
     .content{
+        // padding:27px;
         background: #FFFFFF;
-        li{
-            border-bottom: 1px solid #E9E9E9;
-            padding:1em 2em;
-            display: flex;
-            justify-content: space-between;
-            span{
-                display: inline-block;
-                margin-left: 1em;
-                .description{
-                    color: #747474;
+        .leftList{
+            vertical-align: top;
+            display: inline-block;
+            float: left;
+            width: 19%;
+            .leftTitle{
+                font-size: 12px;
+                font-weight: 400;
+                color: #666666;
+                padding: 10px 24px;
+                border-bottom: 1px solid #E9E9E9;
+            }
+            ul{
+                li{
+                    border-bottom: 1px solid #E9E9E9;
+                    padding: 24px;
+                    cursor: pointer;
+                    &:hover{
+                        background: #eee;
+                    }
+                    img{
+                        width: 45px;
+                        height: 45px;
+                        border-radius: 50%;
+                        vertical-align: middle;
+                    }
+                    .description{
+                        vertical-align: middle;
+                        display: inline-block;
+                        margin-left: 1em;
+                        p{
+                            font-weight: 400;
+                        }
+                        p:nth-child(1){
+                            font-size: 14px;
+                            color: #373737;
+                            line-height: 20px;
+                        }
+                        p:nth-child(2){
+                            font-size: 12px;
+                            color: #555555;
+                            line-height: 17px;
+                        }
+                    }
                 }
             }
         }
+        .rightChat{
+            display: inline-block;
+            width: 80%;
+            float: right;
+            background: #FAFAFA;
+            border: 1px solid #e9eaec;
+            min-height: 70vh;
+        }
+        @include clearfix;
     }
 }
 </style>
