@@ -74,7 +74,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">确定</el-button>
-                        <el-button>取消</el-button>
+                        <el-button @click="cancle()">取消</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -158,6 +158,9 @@ export default {
 
     },
     methods: {
+      cancle(){
+        this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`)
+      },
       handleSelectionChange(val) {
         this.selectStu[val[0].classId]=val
       },

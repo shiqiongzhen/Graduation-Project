@@ -51,7 +51,13 @@ export default {
     computed: {
 
     },
+    watch: {
+		$route(to, from , next) {
+            console.log("route1，周期created")
+		}
+    },
     created() {
+        console.log("我现在在周期created")
         this.$http.get(`/teaching/message/conversationList`
         ).then((res) => { 
             if(res.data.code == "0"){
@@ -102,19 +108,6 @@ export default {
         font-weight: 600;
         margin-bottom: 21px;
     }
-    // .content{
-    //     background: #FFFFFF;
-    //     min-height: 70%;
-    //     .empty{
-    //         color:#7F7F7F;
-    //         text-align: center;
-    //         margin-top: 15vh;
-    //         p{
-    //             margin-top:5px;
-    //             font-weight: bold;
-    //         }
-    //     }
-    // }
     .content{
         // padding:27px;
         background: #FFFFFF;

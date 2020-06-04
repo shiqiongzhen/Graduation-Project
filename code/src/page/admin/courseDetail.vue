@@ -78,7 +78,7 @@
                 <i @click="editIntro=!editIntro" class="el-icon-edit-outline"></i>
             </div>
             <div class="introContent" v-if="editIntro==false" v-html="detail.courseIntroduction"></div>
-            <div class="introContent" v-else>
+            <div class="introContent updateIntroContent" v-else>
                 <el-input
                 type="textarea"
                 :rows="6"
@@ -512,8 +512,12 @@ export default {
                 box-sizing: border-box;
             }
         }
+        .updateIntroContent{
+            padding: 1em !important;
+        }
         .introContent{
-            padding:1em;
+            // padding:1em;
+            padding: 2em 4em 3em;
             span{
                 padding: 10px;
                 text-align: center;

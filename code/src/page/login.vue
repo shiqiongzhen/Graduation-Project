@@ -157,7 +157,7 @@
     .el-main {
         padding:0;
         height: calc(100vh - 60px);
-        background: url("~@/assets/image/loginBackground.png");
+        background: url("~@/assets/image/loginBackground3.png");
         background-size:100vw calc(100vh - 100px);
         box-shadow:0px 0px 3px 1px #C9C9C9;
         background-repeat:no-repeat;

@@ -56,6 +56,12 @@
                                         size="small">
                                         详情
                                         </el-button>
+                                        <el-button
+                                        @click="routeToNotice()"
+                                        type="text"
+                                        size="small">
+                                        私信
+                                        </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -157,6 +163,9 @@ export default {
         // classChange(val){
         //     console.log("cal",val,this.classSelectArray)
         // },
+        routeToNotice(){
+            this.$router.push('/admin/myNotice'); 
+        },
         scoreExport(){
             
         },

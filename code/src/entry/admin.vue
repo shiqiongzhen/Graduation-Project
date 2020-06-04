@@ -6,12 +6,23 @@
                     <!-- <span><i class="el-icon-platform-eleme"></i>智慧教学平台</span> -->
                     <span class="logo"><img src="@/assets/image/logo/logo@1x.png" alt=""></span>
                     <span class="link">
-                        <span style="margin-right: 20px;">
+                        <span class="left" 
+                            @mouseover="selectCourse"
+                            @mouseout="outCourse">
+                            <router-link  to = "/admin"><img :src="courseSrc" alt=""><span>我的课程</span></router-link>
+                        </span>|<span class="right">
+                             <router-link  to = "/admin/user"><img :src="headUrl" alt="" class="headUrl"><span>{{nickname}}</span></router-link>
+                        </span>
+                        <span class="notice"
+                            @mouseover="selectNotice"
+                            @mouseout="outNotice">
+                            <router-link  to = "/admin/systemNotice"><img :src="noticeSrc" alt=""></router-link>
+                        </span>
+                        <!-- <span style="margin-right: 20px;">
                             <router-link  to = "/admin"><img src="@/assets/icon/courseGray.png" alt=""> <span>我的课程</span></router-link>&nbsp;&nbsp;|&nbsp;&nbsp;
                             <router-link  to = "/admin/user"><img :src="headUrl" alt="" class="headUrl"> <span>{{nickname}}</span></router-link> 
-                            <!--  | <router-link  :to = "{ name : 'site' }">我的成绩</router-link> -->
-                        </span>
-                        <span @click="loginOut">退出</span>
+                        </span> -->
+                        <span class="loginOut" @click="loginOut">退出</span>
                     </span>
                 </div>
             </el-header>
@@ -25,12 +36,18 @@
 </template>
 
 <script>
+import courseGray from '@/assets/icon/courseGray.png'
+import courseBlue from '@/assets/icon/courseBlue.png'
+import noticeGray from '@/assets/icon/noticeGray.png'
+import noticeBlue from '@/assets/icon/noticeBlue.png'
 export default {
     props: {
 
     },
     data() {
         return {
+            courseSrc: courseGray,
+            noticeSrc: noticeGray,
             nickname:localStorage.getItem('nickname')||"",
             headUrl: localStorage.getItem('headUrl')||""
         };
@@ -57,6 +74,18 @@ export default {
                 console.log(error)
             })
             
+        },
+        selectCourse(){
+            this.courseSrc=courseBlue
+        },
+        outCourse(){
+            this.courseSrc=courseGray
+        },
+        selectNotice(){
+            this.noticeSrc=noticeBlue
+        },
+        outNotice(){
+            this.noticeSrc=noticeGray
         }
     },
     components: {
@@ -80,18 +109,57 @@ export default {
                 height:60px;
             }
         }
+        // .link{
+        //     float: right;
+        //     span{
+        //         vertical-align:middle;
+        //         cursor: pointer;
+        //         img{
+        //             vertical-align:middle;
+        //         }
+        //         .headUrl{
+        //             width: 30px;
+        //             height: 30px;
+        //         }
+        //     }
+        // }
         .link{
             float: right;
+            color: #3D3D3D;
             span{
                 vertical-align:middle;
                 cursor: pointer;
+                color: #3D3D3D;
                 img{
                     vertical-align:middle;
                 }
                 .headUrl{
                     width: 30px;
                     height: 30px;
+                    border-radius: 50%;
                 }
+            }
+            .left{
+                margin-right: 15px;
+                span{
+                    margin-left: 8px;
+                    &:hover{
+                        color:#3A9AFF;
+                    }
+                }
+            }
+            .right{
+                margin-left: 15px;
+                margin-right: 15px;
+                span{
+                    margin-left: 8px;
+                    &:hover{
+                        color:#3A9AFF;
+                    }
+                }
+            }
+            .notice{
+                margin-right: 25px;
             }
         }
     }

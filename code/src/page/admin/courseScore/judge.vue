@@ -6,13 +6,22 @@
                 <span class="headInfo">
                     <img :src="form.headUrl" alt="">
                     <span>
-                        <h4>{{form.userName}}</h4>
+                        <h4>{{form.userName}}
+                            <el-button
+                                @click="routeToNotice()"
+                                type="text">
+                                <i class="el-icon-message"></i>发消息
+                            </el-button>
+                        </h4>
                         <p>{{form.userNumber}}</p>
                     </span>
                 </span>
                 <el-form ref="form" :rules="rules" :model="form" label-width="120px">
                     <el-form-item label="学生答案">
-                        <tinymceEditor v-model="form.userExperimentText"></tinymceEditor>
+                        <tinymceEditor v-model="form.userExperimentText" disabled="true"></tinymceEditor>
+                    </el-form-item>
+                    <el-form-item label="答案附件">
+                        <p v-for="(item,index) in form.userExperimentFile" :key="index"><a :href="item.filePath">{{item.fileName}}</a></p>
                     </el-form-item>
                     <el-form-item label="是否通过" prop="status">
                         <el-radio-group v-model="form.status">
@@ -36,7 +45,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit('form')">确定</el-button>
-                        <el-button>取消</el-button>
+                        <el-button @click="cancle()">取消</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -86,6 +95,11 @@ export default {
             ).then((res) => { 
                 if(res.data.code == "0"){
                     this.form = res.data.data
+                    if(this.form.status == 1){
+                        this.form.status = '1'
+                    }else{
+                        this.form.status = '0'
+                    }
                 // }else if (res.data.code == "1") {
                     //  this.$router.push('/login'); 
                 }else{
@@ -107,6 +121,12 @@ export default {
 
     },
     methods: {
+      routeToNotice(){
+        this.$router.push('/admin/myNotice'); 
+      },
+      cancle(){
+        this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`)
+      },
       onSubmit(formName) {
         this.$refs[formName].validate((valid) => {
             if (valid) {

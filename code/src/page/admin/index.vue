@@ -1,7 +1,15 @@
 <template>
     <div class="page">
         <div class="addCourse">
-            <el-button type="primary" @click="addCourse()">添加课程 <i class="el-icon-circle-plus-outline"></i></el-button>
+            <!-- <i class="el-icon-circle-plus"
+            @mouseover="selectAdd='true'"
+            @mouseout="selectAdd='false'"></i> -->
+            <el-button type="primary" size="small" @click="addCourse()">创建新的班课 <i class="el-icon-circle-plus-outline"></i></el-button>
+            <el-button type="primary" size="small" @click="importCourse()">导入已有课程 <i class="el-icon-circle-plus-outline"></i></el-button>
+            <!-- <ul v-if="selectAdd == 'true'">
+                <li>创建新的班课</li>
+                <li>导入已有课程</li>
+            </ul> -->
         </div>
         <div class="content">
             <div class="listTitle">
@@ -85,7 +93,8 @@ export default {
         return {
             searchContent:"",
             normalList: [],
-            endList: []
+            endList: [],
+            // selectAdd: 'false'
             // paginations: {
             //     page_current: 1,  // 当前位于哪页
             //     page_size: 20,   // 1页显示多少条
@@ -108,6 +117,9 @@ export default {
     methods: {
         addCourse(){
             this.$router.push('/admin/courseAdd')
+        },
+        importCourse(){
+            this.$router.push('/admin/importCourse')
         },
         handleCurrentChange() {
             this.$http.get(`/teaching/teacher/course/list?keyword=${this.searchContent}`
@@ -143,11 +155,32 @@ export default {
 </script>
 <style scoped lang="scss">
   .page {
+    // background-color:#F4F4F4;
+    // height: calc(100vh - 60px);
     .addCourse{
         width: 60%;
         margin:30px auto 8px;
+        // position: relative;
+        // i{
+        //     font-size: 2em;
+        //     color: #409EFF;
+        // }
+        // ul{
+        //     position: absolute;
+        //     left: 3em;
+        //     top: -0.5em;
+        //     li{
+        //         color: #6D7278;
+        //         font-size: 14px;
+        //         line-height: 1.7em;
+        //         cursor: pointer;
+        //         &:hover{
+        //             color: #409EFF;
+        //         }
+        //     }
+        // }
         .el-button{
-            font-size: 16px;
+            // font-size: 12px;
         }
     }
     .content{

@@ -60,6 +60,11 @@
                                         type="text" style="font-size:20px;">
                                         <i class="el-icon-edit-outline"></i>
                                         </el-button>
+                                        <el-button
+                                        @click="routeToNotice()"
+                                        type="text" style="font-size:20px;">
+                                        <i class="el-icon-message"></i>
+                                        </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -99,9 +104,13 @@
                                     <template slot-scope="scope">
                                         <el-button
                                         @click="judge(scope.row.userId)"
-                                        type="text"
-                                        size="small">
+                                        type="text" style="font-size:20px;">
                                         <i class="el-icon-edit-outline"></i>
+                                        </el-button>
+                                        <el-button
+                                        @click="routeToNotice()"
+                                        type="text" style="font-size:20px;">
+                                        <i class="el-icon-message"></i>
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -141,7 +150,7 @@ export default {
                 this.tableDatas = res.data.data.tableDatas
                 this.experimentList = res.data.data.experimentList
                 this.classList = res.data.data.classList 
-
+                this.classList.unshift({className: "全部", classId: "全部"})
                 if(this.experimentList instanceof Array){
                     this.experimentSelect=this.experimentList[0].experimentId // 默认第一个选项
                 }
@@ -179,6 +188,9 @@ export default {
 
     },
     methods: {
+        routeToNotice(){
+            this.$router.push('/admin/myNotice'); 
+        },
         changeExperimentSelect(id){
             new Promise((resolve, reject)=> {
                 this.loading=true

@@ -57,7 +57,7 @@
                                     <el-form-item v-if="form.isAnswerQuezhi==0" prop="valve">
                                         <el-input v-model="detail.valve" style="width:120px;"></el-input>
                                         <el-alert
-                                            title="提示：当学生点击查看参考答案时，最终实验成绩=教师打分*阈值比例"
+                                            title="提示：当学生提前查看参考答案时，最终实验成绩=教师评分*答案阈值"
                                             type="info" show-icon style="line-height: 1em;margin-top:1em;">
                                         </el-alert>
                                     </el-form-item>
@@ -77,7 +77,7 @@
                     <i @click="editDetail=!editDetail" class="el-icon-edit-outline"></i>
                 </div>
                 <div class="content" v-if="editDetail==false" v-html="detail.experimentText"></div>
-                <div class="content" v-else>
+                <div class="content updateContent" v-else>
                     <tinymceEditor v-model="detail.experimentText"></tinymceEditor>
                     <div class="btnGroup-center">
                         <el-button size="small" type="primary" @click="updateDetail()">确定</el-button>
@@ -629,10 +629,13 @@ export default {
                     float: right;
                 }
             }
+            .updateContent{
+                padding: 1em !important;
+            }
             .content{
-                padding: 1em;
+                // padding: 1em;
                 color:#333333;
-                // padding: 2em 5em 3em;
+                padding: 2em 5em 3em;
                 .simpleInput{
                     margin-bottom: 1em;
                     .el-input{

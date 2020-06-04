@@ -135,7 +135,7 @@ export default {
 <style scoped lang="scss">
   .page {
     .banner{
-        background: url('~@/assets/image/oldBanner.png') no-repeat;
+        background: url('~@/assets/image/homeBanner.png') no-repeat;
         background-size:contain;;
         height: 120px;
     }

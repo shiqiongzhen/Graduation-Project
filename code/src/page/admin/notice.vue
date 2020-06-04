@@ -7,8 +7,8 @@
                     <img src="@/assets/icon/noticeGray.png" alt=""><span>消息中心</span>
                 </div>
                 <ul class="menu">
-                    <router-link to="/systemNotice"><li><span>系统通知</span><i class="el-icon-arrow-right"></i></li></router-link>
-                    <router-link to="/myNotice"><li><span>我的通知</span><i class="el-icon-arrow-right"></i></li></router-link>
+                    <li><router-link to="/admin/systemNotice"><span>系统通知</span><i class="el-icon-arrow-right"></i></router-link></li>
+                    <li><router-link to="/admin/myNotice"><span>我的通知</span><i class="el-icon-arrow-right"></i></router-link></li>
                 </ul>
             </div>
             <div class="rightContainner">

@@ -34,6 +34,7 @@
                 <el-button @click="drawer = true" type="primary"><i class="el-icon-s-unfold"></i> 实验列表</el-button>
             </div>
             <div class="rightFooter">
+                <el-button type="primary" plain @click="routeToNotice()">私信教师</el-button>
                 <el-button type="primary" @click="submit()" :disabled="isDisable">提交</el-button>
             </div>
         </div>
@@ -104,6 +105,9 @@ export default {
       },
     },
     methods: {
+      routeToNotice(){
+          this.$router.push('/myNotice'); 
+      },
       updateRecordFile(data){
           this.recordFile=data
           this.$message({

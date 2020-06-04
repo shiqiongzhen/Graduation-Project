@@ -81,14 +81,14 @@
                         <el-form-item v-if="form.isAnswerQuezhi==0" prop="punishment">
                             <el-input v-model="form.punishment" style="width:120px;"></el-input>
                             <el-alert
-                                title="提示：当学生点击查看参考答案时，最终实验成绩=教师打分*阈值比例"
+                                title="提示：当学生提前查看参考答案时，最终实验成绩=教师评分*答案阈值"
                                 type="info" show-icon style="line-height: 1em;margin-top:1em;">
                             </el-alert>
                         </el-form-item>
                     </el-form-item>
                     <el-form-item class="footer">
                         <el-button type="primary" @click="onSubmit('form')">确定</el-button>
-                        <el-button>取消</el-button>
+                        <el-button @click="cancle()">取消</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -165,6 +165,23 @@ export default {
 
     },
     methods: {
+      cancle(){
+          this.form = {
+            experimentName: '',
+            experimentIntro: '',
+            experimentText: '',
+            experimentStatus: '0',
+            isQuezhi:'0',
+            isAnswerQuezhi:'0',
+            valve:'',
+            punishment:'',
+            experimentAnswerContent:'',
+            experimentDetailFile:[],
+            experimentAnswerFile:[],
+            // fileList: [],
+            // answerfileList:[]
+        }
+      },
       updateDetailFile(data){
           this.form.experimentDetailFile=data
           this.$message({

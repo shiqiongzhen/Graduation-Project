@@ -1,0 +1,33 @@
+@font-face {font-family: "font_family";
+    src: url('//at.alicdn.com/t/font_1861540_9a2wkccbjsj.eot?t=1591194613891'); /* IE9 */
+    src: url('//at.alicdn.com/t/font_1861540_9a2wkccbjsj.eot?t=1591194613891#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAOgAAsAAAAACKwAAANUAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDGgqEMINSATYCJAMQCwoABCAFhREHXBt6BxEVnHPIfhzGMck6O9bkTX/e2PcgpLr+K50M3hfoG+GTuAGwNWf1UNgIVZKVQwVsi0np6fLpYPp7p///ykrwWQAw5rKxJ3dxgXad701hlAU4JllikEp4XQa5I577IUA0UpEDqVCpRgNCDGeYANKja+e2hCUx1hEohAg+Mddyyxw8QjfVXQJmx4+Xj+STEBye4hxUp1PFDpR5o298HRMZQwudyPjllIC0CBTIARhIM1LdAE2tOVCiGVYjCxyrm8AbPxJ5oyH5sH94IAgOBfFx2DGAKWMzeKM+HgJvjJxzPAhx4PiQoRPmAyEQADvgLg42BUzFxTgL4uZMljNF47jEaXv2bvoYa28P33g4KbdvN3Sx9O7dxrL8aO8FidotWibe8oMZGy5cumJDokauoY5dnrj95v3YmCUJGmzYtKoU3lgb2JgMCxr06hetY7dP34pr2z4RJnU9athjwRzVTUskt8+1c12VddduH6tTJ0aqGMFYvfn+2uRYwajkK47KuFSXUjFCQiicI4g1mZxd+vSvMv30rZgF/KpVdtX4ceTYp29D89/50vlzrFu7qk6v3CRRwZivdu+sbo+OHfmxpGzjLyJx4hyLU7zWc6dux/wVb3D6wfEePtz/YP/+eJ0zdJa7MV/vsnOvFmyI+S7oJxNQ/hBHtKMPAJGFekPHQGSktdSJEBkdzxdAIHPXqplaxy7xLYz+ause/Lv1DbThPoQ4kCj/rJu1BAhpJg0SM51Ek30xUuFW/YLMDojmGiCCo4/HkyW4CQebQYheokjAEZAGKNHJDBsmH+xhSsI+pgqIRnbqL45OfEahiEUB2ZjLgJCIg8ARi+tAScRT2DDfIA8n0WEfkxZEo5EUXjM6mWRmNEF5xlKwgeoPfW0NeSKZBV/mVOpe/e/YTqrkWmp27RvZ99ZAEsaE44gGebkJ/tOmIgTEVsOhx2GolAXHdsBawk7EZVFElCCscYJgRnnGUrCB6g99bQ2FTLFpKZy7l7pX5vPcsZ1Uyd05EO5vZA9SR2sgCeNh8JFthmY84ib+06YiBMTMruGwiDsqZXm2o3sNWEvYTTC7LHIr0VB2eHmu/syZIAenm4kTFROPWK9TcbYSeeCRy/+62OzpX6vSe9FjoyYMAg==') format('woff2'),
+    url('//at.alicdn.com/t/font_1861540_9a2wkccbjsj.woff?t=1591194613891') format('woff'),
+    url('//at.alicdn.com/t/font_1861540_9a2wkccbjsj.ttf?t=1591194613891') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url('//at.alicdn.com/t/font_1861540_9a2wkccbjsj.svg?t=1591194613891#font_family') format('svg'); /* iOS 4.1- */
+  }
+  
+  .font_family {
+    font-family: "font_family" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .icon-iconNoticeGray:before {
+    content: "\e603";
+  }
+  
+  .icon-iconNoticeBlue:before {
+    content: "\e604";
+  }
+  
+  .icon-iconMyclassGray:before {
+    content: "\e605";
+  }
+  
+  .icon-iconMyclassBlue:before {
+    content: "\e606";
+  }
+  

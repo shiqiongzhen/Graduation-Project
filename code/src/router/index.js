@@ -46,6 +46,10 @@ export default new Router({
                   }
                 ]
               },
+              {
+                path: '/systemNotice', 
+                component: () => import('@/page/display/systemNotice'),
+              }
             ]
           },
           { 
@@ -98,6 +102,26 @@ export default new Router({
       path: '/admin',
       component: () => import('@/entry/admin'),
       children: [
+          { 
+            path: '/admin/notice', 
+            component: () => import('@/page/admin/notice'),
+            children: [
+              { 
+                path: '/admin/myNotice', 
+                component: () => import('@/page/admin/myNotice'),
+                children:[
+                  { 
+                    path: '/admin/myNotice/:chatId', 
+                    component: () => import('@/page/admin/chat')
+                  }
+                ]
+              },
+              {
+                path: '/admin/systemNotice', 
+                component: () => import('@/page/admin/systemNotice'),
+              }
+            ]
+          },
           { 
             path: '/admin/courseList', alias: '/admin',
             component: () => import('@/page/admin/index'),
@@ -153,6 +177,10 @@ export default new Router({
           {
             path: '/admin/courseAdd',
             component: () => import('@/page/admin/addCourse'),
+          },
+          {
+            path: '/admin/importCourse',
+            component: () => import('@/page/admin/importCourse'),
           },
           {
             path: '/admin/courseList/:courseId/experimentAdd',

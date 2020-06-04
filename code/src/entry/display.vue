@@ -16,7 +16,7 @@
                         <span class="notice"
                             @mouseover="selectNotice"
                             @mouseout="outNotice">
-                            <router-link  to = "/notice"><img :src="noticeSrc" alt=""></router-link>
+                            <router-link  to = "/systemNotice"><img :src="noticeSrc" alt=""></router-link>
                         </span>
                         <span class="loginOut" @click="loginOut">退出</span>
                     </span>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+// import '@/assets/css/font.css'
 import courseGray from '@/assets/icon/courseGray.png'
 import courseBlue from '@/assets/icon/courseBlue.png'
 import noticeGray from '@/assets/icon/noticeGray.png'

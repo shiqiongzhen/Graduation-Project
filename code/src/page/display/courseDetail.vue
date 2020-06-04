@@ -76,8 +76,12 @@ export default {
     filters: {
       courseStatus: (value) => {
         switch(value){
-            case 1:return '进行中';break;
-            case 2:return '锁定中';break;
+            // case 1:return '进行中';break;
+            // case 2:return '锁定中';break;
+            // case 3:return '已结束';break;
+            case 0:return '正常';break;
+            case 1:return '锁定';break;
+            case 2:return '删除';break;
             case 3:return '已结束';break;
             default:return '';
         }

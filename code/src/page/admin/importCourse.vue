@@ -4,6 +4,20 @@
             <breadCrumb :data="navData"></breadCrumb>
             <div class="contain">
                 <el-form ref="form" :model="form"  :rules="rules" label-width="120px">
+                    <el-form-item label="选择已有课程" prop="courseValue">
+                        <el-select v-model="form.courseValue" filterable placeholder="请选择">
+                            <el-option
+                            v-for="item in courseOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                        <el-alert
+                            title="提示：选择已有课程，即可选择导入已创建课程的相关信息与实验信息"
+                            type="info" show-icon style="line-height: 1em;margin-top:1em;">
+                        </el-alert>
+                    </el-form-item>
                     <el-form-item label="课程名称" prop="courseName">
                         <el-input v-model="form.courseName"></el-input>
                     </el-form-item>
@@ -75,11 +89,12 @@ export default {
                     name: "首页",
                     path: "/admin"
                 },{
-                    name: "添加课程",
+                    name: "导入已有课程",
                     path: ""
                 }
             ],
             form: {
+                courseValue: "",
                 courseCode: "",
                 courseName: "",
                 teacherId: "",
@@ -91,7 +106,11 @@ export default {
             },
             mode: "transfer", // transfer addressList
             title:["未加入课程学生", "已加入课程学生"],
+            courseOptions: [],
             rules: {
+                courseValue: [
+                    { required: true, message: '不能为空', trigger: 'blur'  }
+                ],
                 courseName: [
                     { required: true, message: '不能为空', trigger: 'blur'  }
                 ],
@@ -108,12 +127,28 @@ export default {
 
     },
     created() {
+        this.$http.get(`/teaching/teacher/course/courseImport`
+        ).then((res) => { 
+            if(res.data.code == "0"){
+                this.courseOptions =  res.data.data.options
+            // }else if (res.data.code == "1") {
+            //     this.$router.push('/login'); 
+            }else{
+                this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                });
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
         this.$http.get(`/teaching/teacher/course/classSelectList`
         ).then((res) => { 
             if(res.data.code == "0"){
                 this.form.fromData =  res.data.data
-            }else if (res.data.code == "1") {
-                this.$router.push('/login'); 
+            // }else if (res.data.code == "1") {
+            //     this.$router.push('/login'); 
             }else{
                 this.$message({
                     message: res.data.msg,
@@ -142,7 +177,8 @@ export default {
                 return
             }
             if (valid) {
-                this.$http.post(`/teaching/teacher/course/save`,{
+                this.$http.post(`/teaching/teacher/course/import`,{
+                    courseId: this.form.courseValue,
                     courseCode: this.form.courseCode,
                     courseName: this.form.courseName,
                     teacherId: localStorage.getItem('userId'),
@@ -153,7 +189,7 @@ export default {
                 }).then((res) => { 
                     if(res.data.code == "0"){
                         this.$message({
-                            message: "成功新增课程！",
+                            message: "成功导入课程！",
                             type: 'success'
                         });
                         this.$router.push('/admin'); 

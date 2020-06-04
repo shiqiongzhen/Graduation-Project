@@ -106,7 +106,7 @@
         height:120px;
         // background:#477CFE;
         margin-bottom: 30px;
-        background: url('~@/assets/image/banner.png') no-repeat;
+        background: url('~@/assets/image/banner1.png') no-repeat;
         // background-size:cover;
         .containner{
             width: 60%;
