@@ -44,13 +44,14 @@ export default {
 
     },
     data() {
-        const { targetName, targetId } = this.$route.query
+        const { targetName, targetId, unreadIdList } = this.$route.query
         return {
             myHeadUrl: localStorage.getItem('headUrl')||"", 
             websock: null,
             noticeList: [], // 会话列表
             targetName, // 对话窗口的对方名
             targetId, // 对话窗口的对方id
+            unreadIdList, 
             content: "" // 发送的内容
         };
     },
@@ -85,16 +86,19 @@ export default {
     // },
     methods: {
       read(){
-        console.log("read")
-        const content = JSON.stringify({
-            "fromId": localStorage.getItem('userId')||"", 
-            "toId": this.targetId, 
-            "type": 1,
-            "content": "[messId]??",
-            "timestamp": new Date().getTime(), 
-            "Describe": "" 
-        })
-        this.websock.send(content);
+        console.log("read", this.unreadIdList)
+        if(Array.isArray(this.unreadIdList) && this.unreadIdList.length != 0){
+            const content = JSON.stringify({
+                "fromId": localStorage.getItem('userId')||"", 
+                "toId": this.targetId, 
+                "type": 1,
+                "content": this.unreadIdList,
+                "timestamp": new Date().getTime(), 
+                "Describe": "" 
+            })
+            this.websock.send(content);
+            // this.$router.go(0)
+        }
       },
       initData(){
         const { targetName, targetId } = this.$route.query
@@ -126,8 +130,8 @@ export default {
       },
       initWebSocket(){ //初始化weosocket
         console.log("initWebSocket")
-        // const wsuri = `/teaching/imserver/${localStorage.getItem('userId')||""}`;
-        const wsuri = `ws://120.77.242.172:8080/teaching/imserver/${localStorage.getItem('userId')||""}`;
+        const wsuri = `/teaching/imserver/${localStorage.getItem('userId')||""}`;
+        // const wsuri = `ws://120.77.242.172:8080/teaching/imserver/${localStorage.getItem('userId')||""}`;
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;

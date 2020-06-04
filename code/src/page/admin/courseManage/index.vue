@@ -57,7 +57,7 @@
                                         详情
                                         </el-button>
                                         <el-button
-                                        @click="routeToNotice()"
+                                        @click="routeToNotice(scope.row.nickName, scope.row.userId)"
                                         type="text"
                                         size="small">
                                         私信
@@ -100,6 +100,12 @@
                                         type="text"
                                         size="small">
                                         详情
+                                        </el-button>
+                                        <el-button
+                                        @click="routeToNotice(scope.row.nickName, scope.row.userId)"
+                                        type="text"
+                                        size="small">
+                                        私信
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -163,8 +169,15 @@ export default {
         // classChange(val){
         //     console.log("cal",val,this.classSelectArray)
         // },
-        routeToNotice(){
-            this.$router.push('/admin/myNotice'); 
+        routeToNotice(name, targetId){
+            // this.$router.push('/admin/myNotice'); 
+            let id = ''
+            if( Number(targetId) > Number(localStorage.getItem('userId'))){
+                id = `${localStorage.getItem('userId')}-${targetId}`
+            }else{
+                id = `${targetId}-${localStorage.getItem('userId')}`
+            }
+            this.$router.push({ path:`/admin/myNotice/${id}`, query: { 'targetName': name, 'targetId': targetId } })
         },
         scoreExport(){
             

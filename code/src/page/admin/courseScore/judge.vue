@@ -8,7 +8,7 @@
                     <span>
                         <h4>{{form.userName}}
                             <el-button
-                                @click="routeToNotice()"
+                                @click="routeToNotice(form.userName, form.userId)"
                                 type="text">
                                 <i class="el-icon-message"></i>发消息
                             </el-button>
@@ -121,8 +121,18 @@ export default {
 
     },
     methods: {
-      routeToNotice(){
-        this.$router.push('/admin/myNotice'); 
+    //   routeToNotice(){
+    //     this.$router.push('/admin/myNotice'); 
+    //   },
+       routeToNotice(name, targetId){
+            // this.$router.push('/admin/myNotice'); 
+            let id = ''
+            if( Number(targetId) > Number(localStorage.getItem('userId'))){
+                id = `${localStorage.getItem('userId')}-${targetId}`
+            }else{
+                id = `${targetId}-${localStorage.getItem('userId')}`
+            }
+            this.$router.push({ path:`/admin/myNotice/${id}`, query: { 'targetName': name, 'targetId': targetId } })
       },
       cancle(){
         this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`)

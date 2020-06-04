@@ -4,17 +4,17 @@
             我的通知
         </div>
         <div class="content">
-            <div class="empty" v-if="!loading&&(noticeList.length==0)">
+            <div class="empty" v-if="!loading && (noticeList.length==0) && !$route.params.chatId">
                 <img src="@/assets/image/empty/noMessage.png" alt="">
                 <p>暂无通知~</p>
             </div>
             <spin :loading="loading"/>
             <!-- <el-input v-model="mess" style="width: 30%;"></el-input>
             <el-button @click="websocketsend()">发消息</el-button> -->
-            <div class="leftList" v-if="noticeList.length!=0">
+            <div class="leftList" v-if="noticeList.length!=0 || $route.params.chatId">
                 <div class="leftTitle">近期消息</div>
                 <ul>
-                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId)">
+                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId, item.unreadIdList)">
                         <el-badge :value="item.unreadCount" style="width: 100%;" :hidden = "item.unreadCount == 0">
                             <img v-if="item.targetHeadUrl" :src="item.targetHeadUrl" alt="">
                             <img v-else src="@/assets/image/user/user80.png" alt="">
@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="rightChat" v-if="noticeList.length!=0">
+            <div class="rightChat" v-if="noticeList.length!=0 || $route.params.chatId">
                 <router-view></router-view>
             </div>
         </div>
@@ -44,8 +44,7 @@ export default {
             loading: true,
             websock: null,
             noticeList: [],
-            mess: "",
-            readCount: 0
+            mess: ""
         };
     },
     computed: {
@@ -57,7 +56,7 @@ export default {
             if(res.data.code == "0"){
                 this.noticeList = res.data.data.conversations
                 // this.noticeList = this.noticeList.reverse()
-                Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId )
+                Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, this.noticeList[0].unreadIdList||[] )
             // }else if (res.data.code == "1") {
             //     this.$router.push('/login'); 
             }else{
@@ -80,8 +79,10 @@ export default {
 
     },
     methods: {
-        routeToChat(id, targetName, targetId){
-            this.$router.push({ path:`/myNotice/${id}`, query: { 'targetName': targetName, 'targetId': targetId } })
+        routeToChat(id, targetName, targetId, unreadIdList){
+            // this.readCount = 0
+            // console.log("unreadIdList",unreadIdList)
+            this.$router.push({ path:`/myNotice/${id}`, query: { 'targetName': targetName, 'targetId': targetId,  'unreadIdList': unreadIdList} })
         },
     },
     components: {

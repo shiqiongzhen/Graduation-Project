@@ -30,7 +30,7 @@
                 :autosize="{ minRows: 4, maxRows: 4}"
             >
                 <template slot="append">
-                    <el-button @click="websocketsend()">发送</el-button>
+                    <el-button @click="websocketsend()" >发送</el-button>
                 </template>
             </el-input>
             <!-- <el-button class="submit">发送</el-button> -->
@@ -44,13 +44,14 @@ export default {
 
     },
     data() {
-        const { targetName, targetId } = this.$route.query
+        const { targetName, targetId, unreadIdList } = this.$route.query
         return {
             myHeadUrl: localStorage.getItem('headUrl')||"", 
             websock: null,
             noticeList: [], // 会话列表
             targetName, // 对话窗口的对方名
             targetId, // 对话窗口的对方id
+            unreadIdList,
             content: "" // 发送的内容
         };
     },
@@ -85,16 +86,19 @@ export default {
     // },
     methods: {
       read(){
-        console.log("read")
-        const content = JSON.stringify({
-            "fromId": localStorage.getItem('userId')||"", 
-            "toId": this.targetId, 
-            "type": 1,
-            "content": "[messId]??",
-            "timestamp": new Date().getTime(), 
-            "Describe": "" 
-        })
-        this.websock.send(content);
+        console.log("read", this.unreadIdList)
+        if(Array.isArray(this.unreadIdList) && this.unreadIdList.length != 0){
+            const content = JSON.stringify({
+                "fromId": localStorage.getItem('userId')||"", 
+                "toId": this.targetId, 
+                "type": 1,
+                "content": this.unreadIdList,
+                "timestamp": new Date().getTime(), 
+                "Describe": "" 
+            })
+            this.websock.send(content);
+            // this.$router.go(0)
+        }
       },
       initData(){
         const { targetName, targetId } = this.$route.query
@@ -151,6 +155,7 @@ export default {
         }else if(res && res.type == 2){ // 接收即使消息成功
             this.content = ""
             this.initChat()
+            // this.$router.go(0)
         }else{
             this.$message({
                 message: "发送失败，请重试！",

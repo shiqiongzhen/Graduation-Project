@@ -61,7 +61,7 @@
                                         <i class="el-icon-edit-outline"></i>
                                         </el-button>
                                         <el-button
-                                        @click="routeToNotice()"
+                                        @click="routeToNotice(scope.row.nickName, scope.row.userId)"
                                         type="text" style="font-size:20px;">
                                         <i class="el-icon-message"></i>
                                         </el-button>
@@ -108,7 +108,7 @@
                                         <i class="el-icon-edit-outline"></i>
                                         </el-button>
                                         <el-button
-                                        @click="routeToNotice()"
+                                        @click="routeToNotice(scope.row.nickName, scope.row.userId)"
                                         type="text" style="font-size:20px;">
                                         <i class="el-icon-message"></i>
                                         </el-button>
@@ -188,8 +188,15 @@ export default {
 
     },
     methods: {
-        routeToNotice(){
-            this.$router.push('/admin/myNotice'); 
+        routeToNotice(name, targetId){
+            // this.$router.push('/admin/myNotice'); 
+            let id = ''
+            if( Number(targetId) > Number(localStorage.getItem('userId'))){
+                id = `${localStorage.getItem('userId')}-${targetId}`
+            }else{
+                id = `${targetId}-${localStorage.getItem('userId')}`
+            }
+            this.$router.push({ path:`/admin/myNotice/${id}`, query: { 'targetName': name, 'targetId': targetId } })
         },
         changeExperimentSelect(id){
             new Promise((resolve, reject)=> {

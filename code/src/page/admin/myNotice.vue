@@ -4,7 +4,7 @@
             我的通知
         </div>
         <div class="content">
-            <div class="empty" v-if="!loading&&(noticeList.length==0)">
+            <div class="empty" v-if="!loading && (noticeList.length==0)">
                 <img src="@/assets/image/empty/noMessage.png" alt="">
                 <p>暂无通知~</p>
             </div>
@@ -14,7 +14,7 @@
             <div class="leftList" v-if="noticeList.length!=0">
                 <div class="leftTitle">近期消息</div>
                 <ul>
-                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId)">
+                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId, this.noticeList[0].unreadIdList)">
                         <el-badge :value="item.unreadCount" style="width: 100%;" :hidden = "item.unreadCount == 0">
                             <img v-if="item.targetHeadUrl" :src="item.targetHeadUrl" alt="">
                             <img v-else src="@/assets/image/user/user80.png" alt="">
@@ -45,7 +45,7 @@ export default {
             websock: null,
             noticeList: [],
             mess: "",
-            readCount: 0
+            // readCount: 0
         };
     },
     computed: {
@@ -57,13 +57,16 @@ export default {
 		}
     },
     created() {
-        console.log("我现在在周期created")
         this.$http.get(`/teaching/message/conversationList`
         ).then((res) => { 
             if(res.data.code == "0"){
                 this.noticeList = res.data.data.conversations
                 // this.noticeList = this.noticeList.reverse()
-                Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId )
+                if(this.noticeList[0].unreadIdList){
+                    Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, this.noticeList[0].unreadIdList )
+                }else{
+                    Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, [] )
+                }
             // }else if (res.data.code == "1") {
             //     this.$router.push('/login'); 
             }else{
@@ -86,8 +89,8 @@ export default {
 
     },
     methods: {
-        routeToChat(id, targetName, targetId){
-            this.$router.push({ path:`/myNotice/${id}`, query: { 'targetName': targetName, 'targetId': targetId } })
+        routeToChat(id, targetName, targetId, unreadIdList){
+            this.$router.push({ path:`/myNotice/${id}`, query: { 'targetName': targetName, 'targetId': targetId,  'unreadIdList': unreadIdList } })
         },
     },
     components: {
