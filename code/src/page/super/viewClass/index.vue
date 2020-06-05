@@ -70,7 +70,8 @@
                     width="250">
                     <template slot-scope="scope">
                         <span class="operation">
-                            <span v-if="isStop[scope.$index]==false">
+                            <!-- <span v-if="isStop[scope.$index]==false"> -->
+                            <span v-if="scope.row.userStatus==0">
                                 <el-button  class="colorText" @click="stop(scope.row,scope.$index)" type="text" size="small">停用</el-button>
                             </span>
                             <span v-else>

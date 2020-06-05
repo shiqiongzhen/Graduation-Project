@@ -105,9 +105,16 @@ export default {
       },
     },
     methods: {
-      routeToNotice(){
-          this.$router.push('/myNotice'); 
-      },
+        routeToNotice(){
+            this.$router.push('/myNotice'); 
+            // let id = ''name, targetId
+            // if( Number(targetId) > Number(localStorage.getItem('userId'))){
+            //     id = `${localStorage.getItem('userId')}-${targetId}`
+            // }else{
+            //     id = `${targetId}-${localStorage.getItem('userId')}`
+            // }
+            // this.$router.push({ path:`/myNotice/${id}`, query: { 'targetName': name, 'targetId': targetId } })
+        },
       updateRecordFile(data){
           this.recordFile=data
           this.$message({

@@ -93,7 +93,7 @@ export default {
                 "toId": this.targetId, 
                 "type": 1,
                 "content": this.unreadIdList,
-                "timestamp": new Date().getTime(), 
+                "timestamp": Date.parse( new Date()), 
                 "Describe": "" 
             })
             this.websock.send(content);
@@ -130,8 +130,8 @@ export default {
       },
       initWebSocket(){ //初始化weosocket
         console.log("initWebSocket")
-        const wsuri = `/teaching/imserver/${localStorage.getItem('userId')||""}`;
-        // const wsuri = `ws://120.77.242.172:8080/teaching/imserver/${localStorage.getItem('userId')||""}`;
+        // const wsuri = `/teaching/imserver/${localStorage.getItem('userId')||""}`;
+        const wsuri = `ws://120.77.242.172:8080/teaching/imserver/${localStorage.getItem('userId')||""}`;
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
@@ -169,7 +169,7 @@ export default {
             "toId": this.targetId, 
             "type": 0,
             "content": this.content,
-            "timestamp": new Date().getTime(), 
+            "timestamp": Date.parse( new Date()), 
             "Describe": "" 
         })
         this.websock.send(content);

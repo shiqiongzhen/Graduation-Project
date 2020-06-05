@@ -172,14 +172,14 @@ export default {
                     this.headUrl = url
                     this.$http.post(`/teaching/user/updateInfo`,{ // /teaching/teacher/course/updateCourseInfo
                             "headUrl": url
-                        }
-                    ).then((res) => {
+                    }).then((res) => {
                         if(res.data.code == "0"){
                             localStorage.setItem('headUrl', url) 
                             this.$message({
                                 message: "更新成功！",
                                 type: 'success'
                             });
+                            this.$router.go(0)
                         // }else if (res.data.code == "1") {
                         //     this.$router.push('/login'); 
                         }

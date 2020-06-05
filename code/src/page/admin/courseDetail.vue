@@ -190,6 +190,7 @@ export default {
                 formData.append('file', file);
                 this.$http.post(`/teaching/common/file/uploadPic`,formData).then(res=>{
                     this.detail.courseCover = res.data.data.url
+                    this.$router.go(0)
                 }).catch(error=>{
                     this.$message({
                         message: `上传失败！${error}`,

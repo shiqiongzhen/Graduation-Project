@@ -15,14 +15,14 @@
                 <div class="leftTitle">近期消息</div>
                 <ul>
                     <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId, item.unreadIdList)">
-                        <el-badge :value="item.unreadCount" style="width: 100%;" :hidden = "item.unreadCount == 0">
+                        <!-- <el-badge :value="item.unreadCount" style="width: 100%;" :hidden = "item.unreadCount == 0"> -->
                             <img v-if="item.targetHeadUrl" :src="item.targetHeadUrl" alt="">
                             <img v-else src="@/assets/image/user/user80.png" alt="">
                             <span class="description">
                                 <p>{{item.targetName}}</p>
                                 <p>{{item.content}}</p>
                             </span>
-                        </el-badge>
+                        <!-- </el-badge> -->
                     </li>
                 </ul>
             </div>
@@ -55,7 +55,6 @@ export default {
         ).then((res) => { 
             if(res.data.code == "0"){
                 this.noticeList = res.data.data.conversations
-                // this.noticeList = this.noticeList.reverse()
                 Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, this.noticeList[0].unreadIdList||[] )
             // }else if (res.data.code == "1") {
             //     this.$router.push('/login'); 

@@ -166,21 +166,22 @@ export default {
     },
     methods: {
       cancle(){
-          this.form = {
-            experimentName: '',
-            experimentIntro: '',
-            experimentText: '',
-            experimentStatus: '0',
-            isQuezhi:'0',
-            isAnswerQuezhi:'0',
-            valve:'',
-            punishment:'',
-            experimentAnswerContent:'',
-            experimentDetailFile:[],
-            experimentAnswerFile:[],
-            // fileList: [],
-            // answerfileList:[]
-        }
+          this.$router.push(`/admin/courseList/experiment/${this.$route.params.courseId}`)
+        //   this.form = {
+        //     experimentName: '',
+        //     experimentIntro: '',
+        //     experimentText: '',
+        //     experimentStatus: '0',
+        //     isQuezhi:'0',
+        //     isAnswerQuezhi:'0',
+        //     valve:'',
+        //     punishment:'',
+        //     experimentAnswerContent:'',
+        //     experimentDetailFile:[],
+        //     experimentAnswerFile:[],
+        //     // fileList: [],
+        //     // answerfileList:[]
+        // }
       },
       updateDetailFile(data){
           this.form.experimentDetailFile=data

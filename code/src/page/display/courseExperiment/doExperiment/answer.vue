@@ -19,7 +19,7 @@
                         <img src="@/assets/image/file/rar.png" alt="" v-if="item.fileType=='rar' || item.fileType=='zip'">
                         <img src="@/assets/image/file/default.png" alt="" v-if="['doc','ppt','pdf','excel','txt','rar','zip'].indexOf(item.fileType)==-1">
                         <span class="description">
-                            <h3>{{item.fileName}}.{{item.fileType}}</h3>
+                            <h3>{{item.fileName}}</h3>
                             <div>{{item.fileSize||0}}</div>
                             <div>{{item.createTime}}</div>
                         </span>

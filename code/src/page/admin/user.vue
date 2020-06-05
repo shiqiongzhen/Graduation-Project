@@ -180,6 +180,7 @@ export default {
                                 message: "更新成功！",
                                 type: 'success'
                             });
+                            this.$router.go(0)
                         // }else if (res.data.code == "1") {
                         //     this.$router.push('/login'); 
                         }

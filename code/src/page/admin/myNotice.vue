@@ -4,29 +4,29 @@
             我的通知
         </div>
         <div class="content">
-            <div class="empty" v-if="!loading && (noticeList.length==0)">
+            <div class="empty" v-if="!loading && (noticeList.length==0) && !$route.params.chatId">
                 <img src="@/assets/image/empty/noMessage.png" alt="">
                 <p>暂无通知~</p>
             </div>
             <spin :loading="loading"/>
             <!-- <el-input v-model="mess" style="width: 30%;"></el-input>
             <el-button @click="websocketsend()">发消息</el-button> -->
-            <div class="leftList" v-if="noticeList.length!=0">
+            <div class="leftList" v-if="noticeList.length!=0 || $route.params.chatId">
                 <div class="leftTitle">近期消息</div>
                 <ul>
-                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId, this.noticeList[0].unreadIdList)">
-                        <el-badge :value="item.unreadCount" style="width: 100%;" :hidden = "item.unreadCount == 0">
+                    <li v-for="(item,index) in noticeList" :key="index" @click="routeToChat(item.conversationID, item.targetName, item.targetId, item.unreadIdList)">
+                        <!-- <el-badge :value="item.unreadCount" style="width: 100%;" :hidden = "item.unreadCount == 0"> -->
                             <img v-if="item.targetHeadUrl" :src="item.targetHeadUrl" alt="">
                             <img v-else src="@/assets/image/user/user80.png" alt="">
                             <span class="description">
                                 <p>{{item.targetName}}</p>
                                 <p>{{item.content}}</p>
                             </span>
-                        </el-badge>
+                        <!-- </el-badge> -->
                     </li>
                 </ul>
             </div>
-            <div class="rightChat" v-if="noticeList.length!=0">
+            <div class="rightChat" v-if="noticeList.length!=0 || $route.params.chatId">
                 <router-view></router-view>
             </div>
         </div>
@@ -44,29 +44,18 @@ export default {
             loading: true,
             websock: null,
             noticeList: [],
-            mess: "",
-            // readCount: 0
+            mess: ""
         };
     },
     computed: {
 
-    },
-    watch: {
-		$route(to, from , next) {
-            console.log("route1，周期created")
-		}
     },
     created() {
         this.$http.get(`/teaching/message/conversationList`
         ).then((res) => { 
             if(res.data.code == "0"){
                 this.noticeList = res.data.data.conversations
-                // this.noticeList = this.noticeList.reverse()
-                if(this.noticeList[0].unreadIdList){
-                    Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, this.noticeList[0].unreadIdList )
-                }else{
-                    Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, [] )
-                }
+                Array.isArray(this.noticeList) && (this.noticeList.length > 0) && this.routeToChat(this.noticeList[0].conversationID, this.noticeList[0].targetName, this.noticeList[0].targetId, this.noticeList[0].unreadIdList||[] )
             // }else if (res.data.code == "1") {
             //     this.$router.push('/login'); 
             }else{
@@ -90,7 +79,9 @@ export default {
     },
     methods: {
         routeToChat(id, targetName, targetId, unreadIdList){
-            this.$router.push({ path:`/myNotice/${id}`, query: { 'targetName': targetName, 'targetId': targetId,  'unreadIdList': unreadIdList } })
+            // this.readCount = 0
+            // console.log("unreadIdList",unreadIdList)
+            this.$router.push({ path:`/admin/myNotice/${id}`, query: { 'targetName': targetName, 'targetId': targetId,  'unreadIdList': unreadIdList} })
         },
     },
     components: {
@@ -111,6 +102,19 @@ export default {
         font-weight: 600;
         margin-bottom: 21px;
     }
+    // .content{
+    //     background: #FFFFFF;
+    //     min-height: 70%;
+    //     .empty{
+    //         color:#7F7F7F;
+    //         text-align: center;
+    //         margin-top: 15vh;
+    //         p{
+    //             margin-top:5px;
+    //             font-weight: bold;
+    //         }
+    //     }
+    // }
     .content{
         // padding:27px;
         background: #FFFFFF;

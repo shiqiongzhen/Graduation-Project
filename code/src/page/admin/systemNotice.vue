@@ -72,7 +72,7 @@ export default {
         },
         navToMyNotice(){
             this.containner='myNotice'
-            this.$router.push('/myNotice'); 
+            this.$router.push('/admin/myNotice'); 
         },
         closeInfo(){
             this.editMessage=false

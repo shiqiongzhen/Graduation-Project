@@ -50,30 +50,33 @@
                         </div>
                     </div>
                 </div>
-                <el-form ref="form" :model="form" label-width="90px">
+                <el-form ref="form" :rules="rules" :model="form" label-width="90px">
                     <div class="title"><h5>评分信息</h5></div>
-                    <el-form-item label="是否通过" :rules="{ required: true }">
+                    <el-form-item label="是否通过"  prop="status">
                         <el-radio-group v-model="form.status">
                             <el-radio label="1">是</el-radio>
                             <el-radio label="0">否</el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="最终分数" v-if="form.status==1">
+                    <el-form-item label="最终分数" v-if="form.status==1"  prop="experimentAchievement">
                         <el-input v-model="form.experimentAchievement"></el-input>
                     </el-form-item>
-                    <el-form-item label="老师评语" :rules="{ required: true }">
+                    <el-form-item label="老师评语" prop="teacherComment">
                         <el-input
                         type="textarea"
                         :rows="6"
                         placeholder="请输入内容"
                         v-model="form.teacherComment">
                         </el-input>
+                        <span class="randomComment" @click="getComment()">
+                            点击随机生成 <i class="el-icon-edit"></i>
+                        </span>
                         <div class="attachTxt">
                             最多200字
                         </div>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">确定</el-button>
+                        <el-button type="primary" @click="onSubmit('form')">确定</el-button>
                         <el-button @click="cancle()">取消</el-button>
                     </el-form-item>
                 </el-form>
@@ -101,14 +104,29 @@ export default {
                     path: ""
                 }
             ],
-            form: {},
+            form: {
+                status: '0',
+                experimentAchievement: 0,
+                teacherComment: ""
+            },
             experimentName:"",
             commitNum:"",
             time:"",
             tableDatas: [],  // 所有表格的数据
             classList:[],  // 班级选项
             checkList:[],  // 选中的班级
-            selectStu:[]  // 选中的学生
+            selectStu:[],  // 选中的学生
+            rules: {
+                status: [
+                    { required: true, message: '不能为空', trigger: 'blur'  }
+                ],
+                teacherComment: [
+                    { required: true, message: '不能为空', trigger: 'blur'  }
+                ],
+                experimentAchievement: [
+                    { required: true, pattern: /^([1-9]?\d|0|100)$/, message: '不能为空或数值应在0~100之间的整数', trigger: 'blur'  }
+                ]
+            },
         };
     },
     computed: {
@@ -158,11 +176,29 @@ export default {
 
     },
     methods: {
+       getComment(){
+            this.$http.get(`/teaching/teacher/achievement/judge/getOneComment?score=${this.form.experimentAchievement}`)
+            .then((res) => { 
+                if(res.data.code == "0"){
+                    this.form.teacherComment = res.data.data
+                // }else if (res.data.code == "1") {
+                //     this.$router.push('/login'); 
+                }else{
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+       },
       cancle(){
         this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`)
       },
       handleSelectionChange(val) {
-        this.selectStu[val[0].classId]=val
+        val.length>0 && (this.selectStu[val[0].classId]=val)
       },
       transformSelectStu(stu){
           var result= new Set()
@@ -174,32 +210,36 @@ export default {
         //   console.log("res",Array.from(result))
           return Array.from(result)
       },
-      onSubmit() {
-        this.$http.post(`/teaching/teacher/achievement/judge/batch/save`,{
-            "userExperimentIdList": this.transformSelectStu(this.selectStu),
-            "teacherComment": this.form.teacherComment,
-            "status": this.form.status,
-            "experimentAchievement": this.form.experimentAchievement
-        }
-        ).then((res) => { 
-            if(res.data.code == "0"){
-                this.$message({
-                    message: "打分成功！",
-                    type: 'success'
-                });
-                this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`); 
-            }else if (res.data.code == "1") {
-                this.$router.push('/login'); 
-            }else{
-                this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                });
-            }
-            this.loading=false
-        })
-        .catch(function (error) {
-            console.log(error)
+      onSubmit(formName) {
+        this.$refs[formName].validate((valid) => {
+            if (valid) {
+                this.$http.post(`/teaching/teacher/achievement/judge/batch/save`,{
+                    "userExperimentIdList": this.transformSelectStu(this.selectStu),
+                    "teacherComment": this.form.teacherComment,
+                    "status": this.form.status,
+                    "experimentAchievement": this.form.experimentAchievement
+                }
+                ).then((res) => { 
+                    if(res.data.code == "0"){
+                        this.$message({
+                            message: "打分成功！",
+                            type: 'success'
+                        });
+                        this.$router.push(`/admin/courseList/score/${this.$route.params.courseId}`); 
+                    }else if (res.data.code == "1") {
+                        this.$router.push('/login'); 
+                    }else{
+                        this.$message({
+                            message: res.data.msg,
+                            type: 'error'
+                        });
+                    }
+                    this.loading=false
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+             }
         })
       },
     },
@@ -220,6 +260,14 @@ export default {
         .contain{
             background: white;
             padding: 2em;
+            min-height: 80vh;
+            .randomComment{
+                color: #979797;
+                position: absolute;
+                bottom: 35px;
+                right: 15px;
+                cursor: pointer;
+            }
             .headInfo{
                 line-height: 1.9em;
                 p{
