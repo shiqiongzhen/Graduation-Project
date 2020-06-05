@@ -21,7 +21,8 @@
                         <tinymceEditor v-model="form.userExperimentText" disabled="true"></tinymceEditor>
                     </el-form-item>
                     <el-form-item label="答案附件">
-                        <p v-for="(item,index) in form.userExperimentFile" :key="index"><a :href="item.filePath">{{item.fileName}}</a></p>
+                        <p v-if="!form.userExperimentFile || form.userExperimentFile.length=='0'">无</p>
+                        <p v-else v-for="(item,index) in form.userExperimentFile" :key="index"><a :href="item.filePath">{{item.fileName}}</a></p>
                     </el-form-item>
                     <el-form-item label="是否通过" prop="status">
                         <el-radio-group v-model="form.status">
@@ -39,6 +40,9 @@
                         placeholder="请输入内容"
                         v-model="form.teacherComment">
                         </el-input>
+                        <span class="randomComment" @click="getComment()">
+                            点击随机生成 <i class="el-icon-edit"></i>
+                        </span>
                         <div class="attachTxt">
                             最多200字
                         </div>
@@ -124,6 +128,24 @@ export default {
     //   routeToNotice(){
     //     this.$router.push('/admin/myNotice'); 
     //   },
+       getComment(){
+            this.$http.get(`/teaching/teacher/achievement/judge/getOneComment?score=${this.form.experimentAchievement}`)
+            .then((res) => { 
+                if(res.data.code == "0"){
+                    this.form.teacherComment = res.data.data
+                // }else if (res.data.code == "1") {
+                //     this.$router.push('/login'); 
+                }else{
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+       },
        routeToNotice(name, targetId){
             // this.$router.push('/admin/myNotice'); 
             let id = ''
@@ -161,7 +183,7 @@ export default {
                             type: 'error'
                         });
                     }
-                    this.loading=false
+                    // this.loading=false
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -240,6 +262,13 @@ export default {
                     height: 178px;
                     display: block;
                 }
+            }
+            .randomComment{
+                color: #979797;
+                position: absolute;
+                bottom: 35px;
+                right: 15px;
+                cursor: pointer;
             }
         }
     }

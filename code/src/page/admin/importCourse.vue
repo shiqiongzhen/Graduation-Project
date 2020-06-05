@@ -5,7 +5,7 @@
             <div class="contain">
                 <el-form ref="form" :model="form"  :rules="rules" label-width="120px">
                     <el-form-item label="选择已有课程" prop="courseValue">
-                        <el-select v-model="form.courseValue" filterable placeholder="请选择">
+                        <el-select v-model="form.courseValue" filterable placeholder="请选择" @change="changeCourseValue">
                             <el-option
                             v-for="item in courseOptions"
                             :key="item.value"
@@ -167,6 +167,29 @@ export default {
 
     },
     methods: {
+      changeCourseValue(val){
+        this.$http.get(`/teaching/teacher/course/courseImport?courseId=${val}`
+        ).then((res) => { 
+            if(res.data.code == "0"){
+                this.form.courseCode =  res.data.data.course.courseCode
+                this.form.imageUrl =  res.data.data.course.courseCover
+                this.form.courseCredit =  res.data.data.course.courseCredit
+                this.form.courseIntroduction =  res.data.data.course.courseIntroduction
+                this.form.courseName =  res.data.data.course.courseName
+                // this.courseOptions =  res.data.data.options
+            // }else if (res.data.code == "1") {
+            //     this.$router.push('/login'); 
+            }else{
+                this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                });
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+      },
       onSubmit(formName){
         this.$refs[formName].validate((valid) => {
             if(this.form.toData.length == 0){
