@@ -15,7 +15,7 @@
     "el-tree-transfer": "^2.2.6",
     "element-ui": "^2.12.0",
     "node-sass": "^4.12.0",
-    "qs": "^6.9.1",
+    "qs": "^6.9.7",
     "sass-loader": "^7.3.1",
     "tinymce": "^5.0.16",
     "vue": "^2.6.10",
